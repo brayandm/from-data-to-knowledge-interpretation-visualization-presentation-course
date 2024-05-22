@@ -42,7 +42,10 @@ deaths_2003_men <- deaths_2003_men %>%
   group_by(region) %>%
   summarise(total_deaths = sum(value)) %>%
   arrange(desc(total_deaths))
+```
 
+## Answer
+```{r}
 print(paste("The region with the largest number of deaths among men in 2003 was", deaths_2003_men$region[1], "with", deaths_2003_men$total_deaths[1], "deaths."))
 ```
 
@@ -70,7 +73,10 @@ highest_sex_ratios <- pop_2004_wide %>%
   group_by(age) %>%
   summarise(region = region[which.max(sex_ratio)],
             sex_ratio = max(sex_ratio, na.rm = TRUE))
+```
 
+## Answer
+```{r}
 print(paste("The region with the highest sex ratio at age 15 is", highest_sex_ratios$region[1], "with a ratio of", highest_sex_ratios$sex_ratio[1]))
 print(paste("The region with the highest sex ratio at age 45 is", highest_sex_ratios$region[2], "with a ratio of", highest_sex_ratios$sex_ratio[2]))
 print(paste("The region with the highest sex ratio at age over 75 is", highest_sex_ratios$region[3], "with a ratio of", highest_sex_ratios$sex_ratio[3]))
@@ -115,7 +121,10 @@ df_ratio <- df_filtered %>%
   mutate(ASDR_ratio = na_if(ASDR_ratio, Inf)) %>%
   group_by(region) %>%
   summarise(average_ratio = mean(ASDR_ratio, na.rm = TRUE))
+```
 
+## Answer
+```{r}
 print("Average ratio of male ASDR to female ASDR in each region (ages 15-59, year 2001):")
 print(df_ratio)
 ```
@@ -169,7 +178,10 @@ largest_growth_region <- average_ASDR_growth %>%
 
 largest_decrease_region <- average_ASDR_growth %>%
   filter(average_growth == min(average_growth, na.rm = TRUE))
+```
 
+## Answer
+```{r}
 print(paste("Region with the largest average ASDR growth:", largest_growth_region$region))
 print(paste("Region with the largest average ASDR decrease:", largest_decrease_region$region))
 ```
