@@ -535,7 +535,7 @@ df_wide &lt;- df %&gt;%
   pivot_wider(names_from = year, values_from = ASDR)
 
 df_wide &lt;- df_wide %&gt;%
-  mutate(ASDR_growth = `y2005` - `y2001`)
+  mutate(ASDR_growth = `y2005` / `y2001`)
 
 average_ASDR_growth &lt;- df_wide %&gt;%
   group_by(region) %&gt;%
@@ -545,11 +545,11 @@ print(average_ASDR_growth)</code></pre>
 <pre><code>## # A tibble: 5 × 2
 ##   region average_growth
 ##   &lt;chr&gt;           &lt;dbl&gt;
-## 1 DK01        -0.000709
-## 2 DK02        -0.000678
-## 3 DK03        -0.000858
-## 4 DK04        -0.000828
-## 5 DK05        -0.000913</code></pre>
+## 1 DK01            1.03 
+## 2 DK02            0.911
+## 3 DK03            0.899
+## 4 DK04            0.979
+## 5 DK05            0.963</code></pre>
 <pre class="r"><code>largest_growth_region &lt;- average_ASDR_growth %&gt;%
   filter(average_growth == max(average_growth, na.rm = TRUE))
 
@@ -558,9 +558,9 @@ largest_decrease_region &lt;- average_ASDR_growth %&gt;%
 <div id="answer-3" class="section level2">
 <h2>Answer</h2>
 <pre class="r"><code>print(paste(&quot;Region with the largest average ASDR growth:&quot;, largest_growth_region$region))</code></pre>
-<pre><code>## [1] &quot;Region with the largest average ASDR growth: DK02&quot;</code></pre>
+<pre><code>## [1] &quot;Region with the largest average ASDR growth: DK01&quot;</code></pre>
 <pre class="r"><code>print(paste(&quot;Region with the largest average ASDR decrease:&quot;, largest_decrease_region$region))</code></pre>
-<pre><code>## [1] &quot;Region with the largest average ASDR decrease: DK05&quot;</code></pre>
+<pre><code>## [1] &quot;Region with the largest average ASDR decrease: DK03&quot;</code></pre>
 </div>
 </div>
 

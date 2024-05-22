@@ -165,7 +165,7 @@ df_wide <- df %>%
   pivot_wider(names_from = year, values_from = ASDR)
 
 df_wide <- df_wide %>%
-  mutate(ASDR_growth = `y2005` - `y2001`)
+  mutate(ASDR_growth = `y2005` / `y2001`)
 
 average_ASDR_growth <- df_wide %>%
   group_by(region) %>%
