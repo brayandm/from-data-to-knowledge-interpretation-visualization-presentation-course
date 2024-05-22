@@ -119,3 +119,55 @@ df_ratio <- df_filtered %>%
 print("Average ratio of male ASDR to female ASDR in each region (ages 15-59, year 2001):")
 print(df_ratio)
 ```
+
+# Ex 4. Joined dataframe (second part) over your dataframe called df perform the following tasks:
+
+- Filter only both sex (sex= b).
+- Drop columns pop and deaths.
+- Transform to wide format using the column "year" (pivot_wider).
+- Calculate the growth of the ASDR between 2005 and 2001.
+
+# Now answer the following question:
+
+# Q: which regions experienced the largest average growth and decrease in the ASDR?
+
+```{r, message=FALSE, warning=FALSE}
+df <- left_join(deaths_data, pop_data, by = c("year", "region", "sex", "age"))
+
+df <- df %>%
+  filter(age != "total")
+
+df <- df %>%
+  rename(pop = value.y, deaths = value.x)
+
+df <- df %>%
+  mutate(age = if_else(age == "open", 75, as.numeric(substr(age, 2, nchar(age)))))
+
+df <- df %>%
+  filter(sex == "b")
+
+df <- df %>%
+  mutate(ASDR = deaths / pop)
+
+df <- df %>%
+  select(-deaths, -pop)
+
+df_wide <- df %>%
+  pivot_wider(names_from = year, values_from = ASDR)
+
+df_wide <- df_wide %>%
+  mutate(ASDR_growth = `y2005` - `y2001`)
+
+average_ASDR_growth <- df_wide %>%
+  group_by(region) %>%
+  summarise(average_growth = mean(na_if(ASDR_growth, Inf), na.rm = TRUE))
+
+largest_growth_region <- average_ASDR_growth %>%
+  filter(average_growth == max(average_growth, na.rm = TRUE))
+
+largest_decrease_region <- average_ASDR_growth %>%
+  filter(average_growth == min(average_growth, na.rm = TRUE))
+
+print(paste("Region with the largest average ASDR growth:", largest_growth_region$region))
+print(paste("Region with the largest average ASDR decrease:", largest_decrease_region$region))
+```

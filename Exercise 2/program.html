@@ -489,6 +489,63 @@ print(&quot;Average ratio of male ASDR to female ASDR in each region (ages 15-59
 ## 4 DK04            2.06
 ## 5 DK05            1.93</code></pre>
 </div>
+<div id="ex-4.-joined-dataframe-second-part-over-your-dataframe-called-df-perform-the-following-tasks" class="section level1">
+<h1>Ex 4. Joined dataframe (second part) over your dataframe called df
+perform the following tasks:</h1>
+<ul>
+<li>Filter only both sex (sex= b).</li>
+<li>Drop columns pop and deaths.</li>
+<li>Transform to wide format using the column “year” (pivot_wider).</li>
+<li>Calculate the growth of the ASDR between 2005 and 2001.</li>
+</ul>
+</div>
+<div id="now-answer-the-following-question" class="section level1">
+<h1>Now answer the following question:</h1>
+</div>
+<div id="q-which-regions-experienced-the-largest-average-growth-and-decrease-in-the-asdr" class="section level1">
+<h1>Q: which regions experienced the largest average growth and decrease
+in the ASDR?</h1>
+<pre class="r"><code>df &lt;- left_join(deaths_data, pop_data, by = c(&quot;year&quot;, &quot;region&quot;, &quot;sex&quot;, &quot;age&quot;))
+
+df &lt;- df %&gt;%
+  filter(age != &quot;total&quot;)
+
+df &lt;- df %&gt;%
+  rename(pop = value.y, deaths = value.x)
+
+df &lt;- df %&gt;%
+  mutate(age = if_else(age == &quot;open&quot;, 75, as.numeric(substr(age, 2, nchar(age)))))
+
+df &lt;- df %&gt;%
+  filter(sex == &quot;b&quot;)
+
+df &lt;- df %&gt;%
+  mutate(ASDR = deaths / pop)
+
+df &lt;- df %&gt;%
+  select(-deaths, -pop)
+
+df_wide &lt;- df %&gt;%
+  pivot_wider(names_from = year, values_from = ASDR)
+
+df_wide &lt;- df_wide %&gt;%
+  mutate(ASDR_growth = `y2005` - `y2001`)
+
+average_ASDR_growth &lt;- df_wide %&gt;%
+  group_by(region) %&gt;%
+  summarise(average_growth = mean(na_if(ASDR_growth, Inf), na.rm = TRUE))
+
+largest_growth_region &lt;- average_ASDR_growth %&gt;%
+  filter(average_growth == max(average_growth, na.rm = TRUE))
+
+largest_decrease_region &lt;- average_ASDR_growth %&gt;%
+  filter(average_growth == min(average_growth, na.rm = TRUE))
+
+print(paste(&quot;Region with the largest average ASDR growth:&quot;, largest_growth_region$region))</code></pre>
+<pre><code>## [1] &quot;Region with the largest average ASDR growth: DK02&quot;</code></pre>
+<pre class="r"><code>print(paste(&quot;Region with the largest average ASDR decrease:&quot;, largest_decrease_region$region))</code></pre>
+<pre><code>## [1] &quot;Region with the largest average ASDR decrease: DK05&quot;</code></pre>
+</div>
 
 
 
