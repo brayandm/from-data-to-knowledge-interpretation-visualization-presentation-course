@@ -1,3 +1,9 @@
+---
+title: "Homework 3"
+author: "Brayan Duran Medina"
+output: html_document
+---
+
 # Homework 3
 
 IN THE FOLDER OF MATERIALS OF TODAY'S SESSION YOU WILL FIND A CSV CALLED FERTILITY
@@ -7,12 +13,39 @@ PLEASE PERFORM THE FOLLWING TASKS:
 
 READ THE CSV INTO R. NAME THE OBJECT AS ass3.#####
 
+```{r}
+ass3 <- read.csv("fertility.csv")
+```
+
 ## EX1: #######
 Create a line plot showing the evolution of the fertility rate (FR) in Italy between 
 1950 and 2021. Please, annotate the maximum and minimum value within your plot.
 Save your plot as png file.
 
 ```{r}
+library(ggplot2)
+
+italy_data <- subset(ass3, Entity == "Italy" & Year >= 1950 & Year <= 2021)
+
+max_fr <- max(italy_data$FR)
+min_fr <- min(italy_data$FR)
+max_year <- italy_data$Year[which.max(italy_data$FR)]
+min_year <- italy_data$Year[which.min(italy_data$FR)]
+
+p1 <- ggplot(italy_data, aes(x = Year, y = FR)) +
+  geom_line() +
+  geom_point(aes(x = max_year, y = max_fr), color = "red") +
+  geom_point(aes(x = min_year, y = min_fr), color = "blue") +
+  annotate("text", x = max_year, y = max_fr, label = round(max_fr, 2), vjust = -1) +
+  annotate("text", x = min_year, y = min_fr, label = round(min_fr, 2), vjust = -1) +
+  ylim(min_fr - 0.1, max_fr + 0.1) +
+  ggtitle("Fertility Rate in Italy (1950-2021)") +
+  xlab("Year") +
+  ylab("Fertility Rate")
+
+print(p1)
+
+ggsave("plot1.png", plot = p1)
 ```
 
 ## EX2: ####### 
