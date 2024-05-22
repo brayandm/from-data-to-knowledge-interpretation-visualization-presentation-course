@@ -101,6 +101,20 @@ round(x,2)
 Save your plot as png file.
 
 ```{r}
+data_2021_high_fr <- subset(ass3, Year == 2021 & FR >= 4.5)
+
+p4 <- ggplot(data_2021_high_fr, aes(x = reorder(Entity, -FR), y = FR, fill = C4)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = round(FR, 2)), vjust = -0.3) +
+  ggtitle("Countries with Fertility Rate >= 4.5 in 2021") +
+  xlab("Country") +
+  ylab("Fertility Rate") +
+  ylim(0, 8) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+ggsave("plot4.png", plot = p4)
+
+print(p4)
 ```
 
 ## EX5: ######
