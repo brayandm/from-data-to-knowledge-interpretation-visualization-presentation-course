@@ -1,53 +1,69 @@
-#### ASSIGNMENT S2: #######
+# Homework 3
 
-# IN THE FOLDER OF MATERIALS OF TODAY'S SESSION YOU WILL FIND A CSV CALLED FERTILITY
-# This dataset comes from Our World in Data, https://ourworldindata.org/ 
+IN THE FOLDER OF MATERIALS OF TODAY'S SESSION YOU WILL FIND A CSV CALLED FERTILITY
+This dataset comes from Our World in Data, https://ourworldindata.org/ 
 
-# PLEASE PERFORM THE FOLLWING TASKS:
+PLEASE PERFORM THE FOLLWING TASKS:
 
-# READ THE CSV INTO R. NAME THE OBJECT AS ass3.#####
+READ THE CSV INTO R. NAME THE OBJECT AS ass3.#####
 
-# EX1: #######
-# Create a line plot showing the evolution of the fertility rate (FR) in Italy between 
-# 1950 and 2021. Please, annotate the maximum and minimum value within your plot.
-# Save your plot as png file.
+## EX1: #######
+Create a line plot showing the evolution of the fertility rate (FR) in Italy between 
+1950 and 2021. Please, annotate the maximum and minimum value within your plot.
+Save your plot as png file.
 
-# EX2: ####### 
-# Create a multi-line plot showing the evolution of the FR for  Italy, 
-# Spain and Greece between 1950 and 2021. Please, place the legend on the top-
-# right corner inside the plot area. 
-# Save your plot as png file.
+```{r}
+```
 
-# EX3: #######
-# Create a boxplot with the FR by continents (C3) for the year 2020. Please 
-# order the boxplots according to the median fertility in each continent. Hint:
-# fct_reorder(.fun='median')
-# Save your plot as png file. 
+## EX2: ####### 
+Create a multi-line plot showing the evolution of the FR for  Italy, 
+Spain and Greece between 1950 and 2021. Please, place the legend on the top-
+right corner inside the plot area. 
+Save your plot as png file.
 
-# EX4: #####
-# Create a bar plot with those countries that have a FR>= 4.5 in 2021. Fill
-# the bars (colors) using variable C4, order the bars in descendent order and 
-# add labels to each bar with the value of the FR (2 decimals, please).Hint: 
-# round(x,2)
-# Save your plot as png file.
+```{r}
+```
 
-# EX5: ######
-# Create a facet boxplot using data of all countries for years that end in 0 or 5.
-# Place year on the x-axis (hint x=factor(YEAR)) and the fertility rates on the y-axis
-# Use variable C3 (continent) for producing a faceted boxplot. 
-# Please, don't use the default colors  from ggplot. 
-# Save your plot as png file. 
+## EX3: #######
+Create a boxplot with the FR by continents (C3) for the year 2020. Please 
+order the boxplots according to the median fertility in each continent. Hint:
+fct_reorder(.fun='median')
+Save your plot as png file. 
 
-# EX6: ######
-# Create a grouped bar plot with the fertility values in 1980,2000 and 2020 for
-# Argentina, Brazil and Chile. (Hint: fill=factor(Year))
-# Please set a label with the value of FR inside each bar 
-# (Hint: https://r-graphics.org/recipe-bar-graph-labels) 
+```{r}
+```
 
-# EX7: #####
-# Challenge: Create the ugliest theme you can and use it over any of previous plots. 
+## EX4: #####
+Create a bar plot with those countries that have a FR>= 4.5 in 2021. Fill
+the bars (colors) using variable C4, order the bars in descendent order and 
+add labels to each bar with the value of the FR (2 decimals, please).Hint: 
+round(x,2)
+Save your plot as png file.
 
-# for inspiration: 
-# https://twitter.com/CedScherer/status/1236056151210500096
+```{r}
+```
 
-# submit your results by email to juangaleano79@gmail.com
+## EX5: ######
+Create a facet boxplot using data of all countries for years that end in 0 or 5.
+Place year on the x-axis (hint x=factor(YEAR)) and the fertility rates on the y-axis
+Use variable C3 (continent) for producing a faceted boxplot. 
+Please, don't use the default colors  from ggplot. 
+Save your plot as png file. 
+
+```{r}
+```
+
+## EX6: ######
+Create a grouped bar plot with the fertility values in 1980,2000 and 2020 for
+Argentina, Brazil and Chile. (Hint: fill=factor(Year))
+Please set a label with the value of FR inside each bar 
+(Hint: https://r-graphics.org/recipe-bar-graph-labels) 
+
+```{r}
+```
+
+## EX7: #####
+Challenge: Create the ugliest theme you can and use it over any of previous plots. 
+
+```{r}
+```
