@@ -77,6 +77,20 @@ fct_reorder(.fun='median')
 Save your plot as png file. 
 
 ```{r}
+library(dplyr)
+library(forcats)
+
+data_2020 <- subset(ass3, Year == 2020)
+
+p3 <- ggplot(data_2020, aes(x = fct_reorder(C3, FR, .fun = median), y = FR)) +
+  geom_boxplot() +
+  ggtitle("Fertility Rate by Continents (2020)") +
+  xlab("Continent") +
+  ylab("Fertility Rate")
+
+ggsave("plot3.png", plot = p3)
+
+print(p3)
 ```
 
 ## EX4: #####
