@@ -535,7 +535,16 @@ average_ASDR_growth &lt;- df_wide %&gt;%
   group_by(region) %&gt;%
   summarise(average_growth = mean(na_if(ASDR_growth, Inf), na.rm = TRUE))
 
-largest_growth_region &lt;- average_ASDR_growth %&gt;%
+print(average_ASDR_growth)</code></pre>
+<pre><code>## # A tibble: 5 × 2
+##   region average_growth
+##   &lt;chr&gt;           &lt;dbl&gt;
+## 1 DK01        -0.000709
+## 2 DK02        -0.000678
+## 3 DK03        -0.000858
+## 4 DK04        -0.000828
+## 5 DK05        -0.000913</code></pre>
+<pre class="r"><code>largest_growth_region &lt;- average_ASDR_growth %&gt;%
   filter(average_growth == max(average_growth, na.rm = TRUE))
 
 largest_decrease_region &lt;- average_ASDR_growth %&gt;%

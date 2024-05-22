@@ -162,6 +162,8 @@ average_ASDR_growth <- df_wide %>%
   group_by(region) %>%
   summarise(average_growth = mean(na_if(ASDR_growth, Inf), na.rm = TRUE))
 
+print(average_ASDR_growth)
+
 largest_growth_region <- average_ASDR_growth %>%
   filter(average_growth == max(average_growth, na.rm = TRUE))
 
