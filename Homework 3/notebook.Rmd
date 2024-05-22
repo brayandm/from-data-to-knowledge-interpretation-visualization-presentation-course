@@ -43,9 +43,9 @@ p1 <- ggplot(italy_data, aes(x = Year, y = FR)) +
   xlab("Year") +
   ylab("Fertility Rate")
 
-print(p1)
-
 ggsave("plot1.png", plot = p1)
+
+print(p1)
 ```
 
 ## EX2: ####### 
@@ -55,6 +55,19 @@ right corner inside the plot area.
 Save your plot as png file.
 
 ```{r}
+countries_data <- subset(ass3, Entity %in% c("Italy", "Spain", "Greece") & Year >= 1950 & Year <= 2021)
+
+p2 <- ggplot(countries_data, aes(x = Year, y = FR, color = Entity)) +
+  geom_line() +
+  theme(legend.position = c(0.9, 0.8)) +
+  labs(color = "Country") +
+  ggtitle("Fertility Rate in Italy, Spain, and Greece (1950-2021)") +
+  xlab("Year") +
+  ylab("Fertility Rate")
+
+ggsave("plot2.png", plot = p2)
+
+print(p2)
 ```
 
 ## EX3: #######
