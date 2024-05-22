@@ -12,7 +12,7 @@
 <meta name="author" content="Brayan Duran Medina" />
 
 
-<title>Exercise 2</title>
+<title>Homework 2</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -349,7 +349,7 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Exercise 2</h1>
+<h1 class="title toc-ignore">Homework 2</h1>
 <h4 class="author">Brayan Duran Medina</h4>
 
 </div>
@@ -428,6 +428,70 @@ print(paste(&quot;The region with the highest sex ratio at age 15 is&quot;, high
 <pre><code>## [1] &quot;The region with the highest sex ratio at age 45 is DK03 with a ratio of 104.630897547616&quot;</code></pre>
 <pre class="r"><code>print(paste(&quot;The region with the highest sex ratio at age over 75 is&quot;, highest_sex_ratios$region[3], &quot;with a ratio of&quot;, highest_sex_ratios$sex_ratio[3]))</code></pre>
 <pre><code>## [1] &quot;The region with the highest sex ratio at age over 75 is DK05 with a ratio of 65.0347819582616&quot;</code></pre>
+</div>
+<div id="ex-3.-joined-dataframe.-perform-the-following-tasks" class="section level1">
+<h1>Ex 3. Joined dataframe. Perform the following tasks:</h1>
+<ul>
+<li>Join the two dataframes (left_join OR inner_join) into a new one
+called df.</li>
+<li>Remove rows where age is equal to total.</li>
+<li>Change the names of columns value.x and value.y to pop and
+deaths.</li>
+<li>Convert column age to a number (Note: open = 75). Hint: substr and
+if_else.</li>
+<li>Calculate the Age Specific Death Ratios in a column called ASDR.
+Hint: mutate.</li>
+</ul>
+</div>
+<div id="now-that-you-have-df-filter-only-the-ages-15-59-and-year-2001-and-answer-the-following-question" class="section level1">
+<h1>Now that you have df filter only the ages 15-59 and year 2001 and
+answer the following question:</h1>
+</div>
+<div id="q-which-is-the-average-ratio-of-male-asdr-to-female-asdr-in-each-region" class="section level1">
+<h1>Q: Which is the average ratio of male ASDR to female ASDR in each
+region?</h1>
+<pre class="r"><code>df &lt;- left_join(deaths_data, pop_data, by = c(&quot;year&quot;, &quot;region&quot;, &quot;sex&quot;, &quot;age&quot;))
+
+df &lt;- df %&gt;%
+  filter(age != &quot;total&quot;)
+
+df &lt;- df %&gt;%
+  rename(pop = value.y, deaths = value.x)
+
+df &lt;- df %&gt;%
+  mutate(age = if_else(age == &quot;open&quot;, 75, as.numeric(substr(age, 2, nchar(age)))))</code></pre>
+<pre><code>## Warning: There was 1 warning in `mutate()`.
+## ℹ In argument: `age = if_else(age == &quot;open&quot;, 75, as.numeric(substr(age, 2,
+##   nchar(age))))`.
+## Caused by warning in `if_else()`:
+## ! NAs introduced by coercion</code></pre>
+<pre class="r"><code>df &lt;- df %&gt;%
+  mutate(ASDR = deaths / pop)
+
+df &lt;- df %&gt;%
+  select(-deaths, -pop)
+
+df_filtered &lt;- df %&gt;%
+  filter(age &gt;= 15 &amp; age &lt;= 59 &amp; year == &quot;y2001&quot;)
+
+df_ratio &lt;- df_filtered %&gt;%
+  pivot_wider(names_from = sex, values_from = ASDR) %&gt;%
+  mutate(ASDR_ratio = m / f) %&gt;%
+  mutate(ASDR_ratio = na_if(ASDR_ratio, Inf)) %&gt;%
+  group_by(region) %&gt;%
+  summarise(average_ratio = mean(ASDR_ratio, na.rm = TRUE))
+
+print(&quot;Average ratio of male ASDR to female ASDR in each region (ages 15-59, year 2001):&quot;)</code></pre>
+<pre><code>## [1] &quot;Average ratio of male ASDR to female ASDR in each region (ages 15-59, year 2001):&quot;</code></pre>
+<pre class="r"><code>print(df_ratio)</code></pre>
+<pre><code>## # A tibble: 5 × 2
+##   region average_ratio
+##   &lt;chr&gt;          &lt;dbl&gt;
+## 1 DK01            1.77
+## 2 DK02            2.22
+## 3 DK03            2.34
+## 4 DK04            2.06
+## 5 DK05            1.93</code></pre>
 </div>
 
 

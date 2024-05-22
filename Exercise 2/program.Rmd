@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2"
+title: "Homework 2"
 author: "Brayan Duran Medina"
 output: html_document
 ---
@@ -74,4 +74,48 @@ highest_sex_ratios <- pop_2004_wide %>%
 print(paste("The region with the highest sex ratio at age 15 is", highest_sex_ratios$region[1], "with a ratio of", highest_sex_ratios$sex_ratio[1]))
 print(paste("The region with the highest sex ratio at age 45 is", highest_sex_ratios$region[2], "with a ratio of", highest_sex_ratios$sex_ratio[2]))
 print(paste("The region with the highest sex ratio at age over 75 is", highest_sex_ratios$region[3], "with a ratio of", highest_sex_ratios$sex_ratio[3]))
+```
+
+# Ex 3. Joined dataframe. Perform the following tasks:
+
+- Join the two dataframes (left_join OR inner_join) into a new one called df.
+- Remove rows where age is equal to total.
+- Change the names of columns value.x and value.y to pop and deaths.
+- Convert column age to a number (Note: open = 75). Hint: substr and if_else.
+- Calculate the Age Specific Death Ratios in a column called ASDR. Hint: mutate.
+
+# Now that you have df filter only the ages 15-59 and year 2001 and answer the following question:
+
+# Q: Which is the average ratio of male ASDR to female ASDR in each region?
+
+```{r}
+df <- left_join(deaths_data, pop_data, by = c("year", "region", "sex", "age"))
+
+df <- df %>%
+  filter(age != "total")
+
+df <- df %>%
+  rename(pop = value.y, deaths = value.x)
+
+df <- df %>%
+  mutate(age = if_else(age == "open", 75, as.numeric(substr(age, 2, nchar(age)))))
+
+df <- df %>%
+  mutate(ASDR = deaths / pop)
+
+df <- df %>%
+  select(-deaths, -pop)
+
+df_filtered <- df %>%
+  filter(age >= 15 & age <= 59 & year == "y2001")
+
+df_ratio <- df_filtered %>%
+  pivot_wider(names_from = sex, values_from = ASDR) %>%
+  mutate(ASDR_ratio = m / f) %>%
+  mutate(ASDR_ratio = na_if(ASDR_ratio, Inf)) %>%
+  group_by(region) %>%
+  summarise(average_ratio = mean(ASDR_ratio, na.rm = TRUE))
+
+print("Average ratio of male ASDR to female ASDR in each region (ages 15-59, year 2001):")
+print(df_ratio)
 ```
