@@ -459,13 +459,9 @@ df &lt;- df %&gt;%
   rename(pop = value.y, deaths = value.x)
 
 df &lt;- df %&gt;%
-  mutate(age = if_else(age == &quot;open&quot;, 75, as.numeric(substr(age, 2, nchar(age)))))</code></pre>
-<pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `age = if_else(age == &quot;open&quot;, 75, as.numeric(substr(age, 2,
-##   nchar(age))))`.
-## Caused by warning in `if_else()`:
-## ! NAs introduced by coercion</code></pre>
-<pre class="r"><code>df &lt;- df %&gt;%
+  mutate(age = if_else(age == &quot;open&quot;, 75, as.numeric(substr(age, 2, nchar(age)))))
+
+df &lt;- df %&gt;%
   mutate(ASDR = deaths / pop)
 
 df &lt;- df %&gt;%

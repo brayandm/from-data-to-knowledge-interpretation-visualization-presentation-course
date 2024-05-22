@@ -88,7 +88,7 @@ print(paste("The region with the highest sex ratio at age over 75 is", highest_s
 
 # Q: Which is the average ratio of male ASDR to female ASDR in each region?
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 df <- left_join(deaths_data, pop_data, by = c("year", "region", "sex", "age"))
 
 df <- df %>%
