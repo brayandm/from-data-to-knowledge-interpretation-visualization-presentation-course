@@ -48,15 +48,25 @@ data_long <- data_2016 %>%
 
 data_long$COM <- factor(data_long$COM, levels = data_2016$COM[order(data_2016$foreign_percentage)])
 
+data_long <- data_long %>%
+  group_by(COM) %>%
+  mutate(pos = cumsum(percentage) - percentage / 2,
+         label = paste0(round(percentage, 2), "%"))
+
 print(data_long)
 
 ggplot(data_long, aes(x = 2, y = percentage, fill = population_type)) +
   geom_bar(stat = "identity", width = 1) +
+  geom_text(aes(label = label, y = pos), color = "black", size = 3) +
   coord_polar(theta = "y", start = 0) +
   facet_wrap(~ COM, ncol = 4) +  
   theme_void() +
-  theme(legend.position = "bottom") +
-  labs(fill = "Population Type", 
+  theme(
+    legend.position = "bottom",
+    panel.background = element_rect(fill = "white", color = NA),  
+    plot.background = element_rect(fill = "white", color = NA)    
+  ) +
+  labs(fill = "Group", 
        title = "Percentage of Spanish-born and Foreign-born Population by Region in Spain (2016)") +
   xlim(0.5, 2.5)
 
