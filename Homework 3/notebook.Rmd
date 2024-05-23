@@ -148,10 +148,39 @@ Please set a label with the value of FR inside each bar
 (Hint: https://r-graphics.org/recipe-bar-graph-labels) 
 
 ```{r}
+selected_years <- subset(ass3, Entity %in% c("Argentina", "Brazil", "Chile") & Year %in% c(1980, 2000, 2020))
+
+p6 <- ggplot(selected_years, aes(x = Entity, y = FR, fill = factor(Year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = round(FR, 2)), position = position_dodge(width = 0.9), vjust = 1.5) +
+  ggtitle("Fertility Rates for Argentina, Brazil, and Chile (1980, 2000, 2020)") +
+  xlab("Country") +
+  ylab("Fertility Rate") +
+  labs(fill = "Year")
+
+ggsave("plot6.png", plot = p6)
+
+print(p6)
 ```
 
 ## EX7: #####
 Challenge: Create the ugliest theme you can and use it over any of previous plots. 
 
 ```{r}
+ugly_theme <- theme(
+  panel.background = element_rect(fill = "yellow"),
+  plot.background = element_rect(fill = "pink"),
+  legend.background = element_rect(fill = "green"),
+  panel.grid.major = element_line(color = "red"),
+  panel.grid.minor = element_line(color = "blue"),
+  axis.text = element_text(color = "brown"),
+  axis.title = element_text(color = "purple"),
+  plot.title = element_text(color = "orange", size = 20)
+)
+
+p7 <- p1 + ugly_theme
+
+ggsave("plot7.png", plot = p7)
+
+print(p7)
 ```
