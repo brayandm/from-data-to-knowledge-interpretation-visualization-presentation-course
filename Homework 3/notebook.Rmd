@@ -136,7 +136,7 @@ p5 <- ggplot(years_ending_in_0_or_5, aes(x = factor(Year), y = FR, fill = C3)) +
   ) +
   scale_fill_manual(values = c("red", "green", "blue", "purple", "orange", "yellow"))
 
-ggsave("plot5.png", plot = p5)
+ggsave("plot5.png", plot = p5, width = 12, height = 6)
 
 print(p5)
 ```
