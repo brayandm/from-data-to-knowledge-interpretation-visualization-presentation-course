@@ -1,0 +1,50 @@
+---
+title: "Homework 3"
+author: "Brayan Duran Medina"
+output: html_document
+---
+
+## EX 1: DONUTS ######
+ Using data_S2, please produce a facet donut-plot showing the percentage of 
+ Spanish-born and foreign-born population living in each region (COM) of Spain
+ in 2016. 
+ Save your plot as an image.
+
+ One soda, beer or glass of wine invited by the instructor to the first
+ person who, programmatically, manage to order de facets in ascendant order with
+ respect to percentage of foreign-born population living in each region. 
+
+```{r}
+```
+
+## EX 2: JOYPLOTS ########
+ Read countries.csv and e0M.csv into R
+ Use the countries in countries.csv to filter e0M
+ Produce a joy plot (ridges) setting the time interval on the y-axis and the 
+ values on the x-axis. Maybe you want to take a look:
+ https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html
+ Save your plot as an image.
+
+```{r}
+```
+
+## EX 3: LOLLIPOP #######
+ Read CoDB_2021.csv into R
+ Create a faceted lollipop plot with the proportion of 1-person (HS01), 2-3persons (HS12),
+ 4-5persons (HS13) and 6+persons (HS14) households in each country. 
+ Please, express the proportion as a percentage. Hint: labels = scales::percent
+ Save your plot as an image. 
+
+```{r}
+```
+
+## Ex 4: SMOOTHED DOTS #####
+ Read CoDB_NDS.csv into r
+ Create a new data frame selecting columns 2 to 6 and HS01 to HS11 (proportion 
+ of households of 1,2,3...10 and 11+ persons) and keep the cases of LATIN-AMERICA
+(C3) when the source of the data (S2) is equal IPUMS
+ Using variable C4 for faceting, plot a smoothed dot plot with the value of 
+ indicators (HS01: HS11) on the yaxis and the time (T1) in the xaxis. 
+
+```{r}
+```
