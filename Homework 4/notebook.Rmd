@@ -1,5 +1,5 @@
 ---
-title: "Homework 3"
+title: "Homework 4"
 author: "Brayan Duran Medina"
 output: html_document
 ---
@@ -15,6 +15,52 @@ output: html_document
  respect to percentage of foreign-born population living in each region. 
 
 ```{r}
+
+library(dplyr)
+library(tidyr)
+library(readxl)
+library(ggplot2)
+
+load("data/data_s2.Rdata")
+
+data_S2 <- data
+
+data_2016 <- subset(data_S2, YEAR == 2016)
+
+data_2016$total_population <- rowSums(data_2016[, c("POP_SPANISH", "POP_LATINAMERICA", 
+                                                    "POP_WESTERNEUROPE", "POP_EASTERNEUROPE", 
+                                                    "POP_AFRICA", "POP_ASIA", "POP_OTHERS")])
+
+data_2016$spanish_population <- rowSums(data_2016[c("POP_SPANISH")])
+
+data_2016 <- data_2016 %>% group_by(COM) %>% summarise(total_population = sum(total_population),
+                                                       spanish_population = sum(spanish_population))
+
+data_2016 <- data_2016 %>%
+  mutate(foreign_population = total_population - spanish_population,
+         spanish_percentage = (spanish_population / total_population) * 100,
+         foreign_percentage = (foreign_population / total_population) * 100)
+
+print(data_2016)
+
+data_long <- data_2016 %>%
+  gather(key = "population_type", value = "percentage", spanish_percentage, foreign_percentage)
+
+data_long$COM <- factor(data_long$COM, levels = data_2016$COM[order(data_2016$foreign_percentage)])
+
+print(data_long)
+
+ggplot(data_long, aes(x = 2, y = percentage, fill = population_type)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y", start = 0) +
+  facet_wrap(~ COM, ncol = 4) +  
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(fill = "Population Type", 
+       title = "Percentage of Spanish-born and Foreign-born Population by Region in Spain (2016)") +
+  xlim(0.5, 2.5)
+
+ggsave("facet_donut_plot.png", width = 12, height = 8)
 ```
 
 ## EX 2: JOYPLOTS ########
