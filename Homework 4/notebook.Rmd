@@ -41,8 +41,6 @@ data_2016 <- data_2016 %>%
          spanish_percentage = (spanish_population / total_population) * 100,
          foreign_percentage = (foreign_population / total_population) * 100)
 
-print(data_2016)
-
 data_long <- data_2016 %>%
   gather(key = "population_type", value = "percentage", spanish_percentage, foreign_percentage)
 
@@ -53,13 +51,14 @@ data_long <- data_long %>%
   mutate(pos = cumsum(percentage) - percentage / 2,
          label = paste0(round(percentage, 2), "%"))
 
-print(data_long)
+colors <- c("spanish_percentage" = "#1f77b4", "foreign_percentage" = "#ff7f0e")
 
 ggplot(data_long, aes(x = 2, y = percentage, fill = population_type)) +
   geom_bar(stat = "identity", width = 1) +
   geom_text(aes(label = label, y = pos), color = "black", size = 3) +
   coord_polar(theta = "y", start = 0) +
-  facet_wrap(~ COM, ncol = 4) +  
+  facet_wrap(~ COM, ncol = 4) +
+  scale_fill_manual(values = colors, labels = c("Spanish-born", "Foreign-born")) +
   theme_void() +
   theme(
     legend.position = "bottom",
