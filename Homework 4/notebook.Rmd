@@ -64,7 +64,7 @@ ggplot(data_long, aes(x = 2, y = percentage, fill = population_type)) +
     legend.position = "bottom",
     panel.background = element_rect(fill = "white", color = NA),
     plot.background = element_rect(fill = "white", color = NA),
-    plot.title = element_text(size = 10),
+    plot.title = element_text(size = 12, margin = margin(b = 10)),
   ) +
   labs(fill = "Group", 
        title = "Percentage of Spanish-born and Foreign-born Population by Region in Spain (2016)") +
