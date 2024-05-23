@@ -4,8 +4,6 @@ author: "Brayan Duran Medina"
 output: html_document
 ---
 
-# Homework 3
-
 IN THE FOLDER OF MATERIALS OF TODAY'S SESSION YOU WILL FIND A CSV CALLED FERTILITY
 This dataset comes from Our World in Data, https://ourworldindata.org/ 
 
@@ -125,6 +123,22 @@ Please, don't use the default colors  from ggplot.
 Save your plot as png file. 
 
 ```{r}
+years_ending_in_0_or_5 <- subset(ass3, Year %% 5 == 0)
+
+p5 <- ggplot(years_ending_in_0_or_5, aes(x = factor(Year), y = FR, fill = C3)) +
+  geom_boxplot() +
+  facet_wrap(~ C3) +
+  ggtitle("Fertility Rates for Years Ending in 0 or 5") +
+  xlab("Year") +
+  ylab("Fertility Rate") +
+  theme(
+    axis.text.x = element_text(angle = 45, vjust = 0.5, size = 6),
+  ) +
+  scale_fill_manual(values = c("red", "green", "blue", "purple", "orange", "yellow"))
+
+ggsave("plot5.png", plot = p5)
+
+print(p5)
 ```
 
 ## EX6: ######
