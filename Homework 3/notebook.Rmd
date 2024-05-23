@@ -59,7 +59,7 @@ p2 <- ggplot(countries_data, aes(x = Year, y = FR, color = Entity)) +
   geom_line() +
   theme(legend.position = c(0.9, 0.8)) +
   labs(color = "Country") +
-  ggtitle("Fertility Rate in Italy, Spain, and Greece (1950-2021)") +
+  ggtitle("Fertility Rate in Greece, Italy and Spain (1950-2021)") +
   xlab("Year") +
   ylab("Fertility Rate")
 
@@ -103,7 +103,7 @@ data_2021_high_fr <- subset(ass3, Year == 2021 & FR >= 4.5)
 
 p4 <- ggplot(data_2021_high_fr, aes(x = reorder(Entity, -FR), y = FR, fill = C4)) +
   geom_bar(stat = "identity") +
-  geom_text(aes(label = round(FR, 2)), vjust = -0.3) +
+  geom_text(aes(label = round(FR, 2)), vjust = -0.3, size = 2) +
   ggtitle("Countries with Fertility Rate >= 4.5 in 2021") +
   xlab("Country") +
   ylab("Fertility Rate") +
@@ -128,7 +128,7 @@ years_ending_in_0_or_5 <- subset(ass3, Year %% 5 == 0)
 p5 <- ggplot(years_ending_in_0_or_5, aes(x = factor(Year), y = FR, fill = C3)) +
   geom_boxplot() +
   facet_wrap(~ C3) +
-  ggtitle("Fertility Rates for Years Ending in 0 or 5") +
+  ggtitle("Fertility Rates by Continent") +
   xlab("Year") +
   ylab("Fertility Rate") +
   theme(
