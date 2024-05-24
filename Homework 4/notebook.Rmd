@@ -14,7 +14,7 @@ output: html_document
  person who, programmatically, manage to order de facets in ascendant order with
  respect to percentage of foreign-born population living in each region. 
 
-```{r}
+```{r, cache = TRUE}
 
 library(dplyr)
 library(tidyr)
@@ -82,6 +82,37 @@ ggsave("facet_donut_plot.png", width = 12, height = 8)
  Save your plot as an image.
 
 ```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(readxl)
+library(readr)
+library(ggridges)
+
+countries <- read_csv("data/countries.csv")
+e0M <- read_csv("data/e0M.csv")
+
+filtered_e0M <- e0M %>%
+  filter(country %in% countries$x)
+
+e0M_long <- filtered_e0M %>%
+  gather(key = "time_interval", value = "value", -country, -country_code)
+
+e0M_long$time_interval <- factor(e0M_long$time_interval, levels = unique(e0M_long$time_interval))
+
+e0M_long <- e0M_long %>%
+  filter(time_interval != "last.observed")
+
+p <- ggplot(e0M_long, aes(x = value, y = time_interval)) +
+  geom_density_ridges(scale = 1, rel_min_height = 0.01, bandwidth = 2) 
+  theme_ridges() +
+  labs(title = "Joy Plot of e0M Data",
+       x = "Values",
+       y = "Time Interval")
+
+ggsave("joy_plot.png", plot = p, width = 12, height = 8)
+
+print(p)
 ```
 
 ## EX 3: LOLLIPOP #######
