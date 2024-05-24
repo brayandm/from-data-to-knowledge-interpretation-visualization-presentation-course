@@ -199,9 +199,9 @@ filtered_df <- df %>%
 long_df <- filtered_df %>%
   pivot_longer(cols = starts_with("HS"), names_to = "Household_Size", values_to = "Value")
 
-plot <- ggplot(long_df, aes(x = T1, y = Value, color = Household_Size)) +
+plot <- ggplot(long_df, aes(x = T1, y = Value, color = Household_Size, fill = Household_Size)) +
   geom_point() +
-  geom_smooth(se = FALSE) +
+  geom_smooth(se = TRUE, size = 1, alpha = 0.2) +  # Línea suavizada con sombreado del mismo color
   facet_wrap(~ C4) +
   labs(x = "Time", y = "Value of Indicators", 
        title = "Smoothed Dot Plot of Household Size Indicators Over Time") +
@@ -209,7 +209,7 @@ plot <- ggplot(long_df, aes(x = T1, y = Value, color = Household_Size)) +
   theme_minimal() +
   theme(
     panel.background = element_rect(fill = "white", color = NA),
-    plot.background = element_rect(fill = "white", color = NA),
+    plot.background = element_rect(fill = "white", color = NA)
   )
 
 ggsave("smoothed_dot_plot.png", plot, width = 12, height = 6)
