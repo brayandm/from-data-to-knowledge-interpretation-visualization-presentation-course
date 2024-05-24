@@ -129,7 +129,7 @@ print(p)
  Please, express the proportion as a percentage. Hint: labels = scales::percent
  Save your plot as an image. 
 
-```{r}
+```{r, cache = TRUE}
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -186,4 +186,28 @@ print(plot)
  indicators (HS01: HS11) on the yaxis and the time (T1) in the xaxis. 
 
 ```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+df <- read.csv("data/CoDB_NDS.csv")
+
+filtered_df <- df %>%
+  filter(S2 == "IPUMS" & C3 == "LATIN-AMERICA") %>%
+  select(C4, T1, HS01:HS11)
+
+long_df <- filtered_df %>%
+  pivot_longer(cols = starts_with("HS"), names_to = "Household_Size", values_to = "Value")
+
+plot <- ggplot(long_df, aes(x = T1, y = Value, color = Household_Size)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  facet_wrap(~ C4) +
+  labs(x = "Time (T1)", y = "Value of Indicators (HS01:HS11)", 
+       title = "Smoothed Dot Plot of Household Size Indicators Over Time") +
+  theme_minimal()
+
+ggsave("smoothed_dot_plot.png", plot, width = 15, height = 10)
+
+print(plot)
 ```
