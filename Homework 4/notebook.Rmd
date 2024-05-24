@@ -203,11 +203,16 @@ plot <- ggplot(long_df, aes(x = T1, y = Value, color = Household_Size)) +
   geom_point() +
   geom_smooth(se = FALSE) +
   facet_wrap(~ C4) +
-  labs(x = "Time (T1)", y = "Value of Indicators (HS01:HS11)", 
+  labs(x = "Time", y = "Value of Indicators", 
        title = "Smoothed Dot Plot of Household Size Indicators Over Time") +
-  theme_minimal()
+  scale_x_continuous(breaks = seq(1960, 2020, by = 10)) +
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+  )
 
-ggsave("smoothed_dot_plot.png", plot, width = 15, height = 10)
+ggsave("smoothed_dot_plot.png", plot, width = 12, height = 6)
 
 print(plot)
 ```
