@@ -98,18 +98,21 @@ filtered_e0M <- e0M %>%
 e0M_long <- filtered_e0M %>%
   gather(key = "time_interval", value = "value", -country, -country_code)
 
-e0M_long$time_interval <- factor(e0M_long$time_interval, levels = unique(e0M_long$time_interval))
+e0M_long$time_interval <- factor(e0M_long$time_interval, levels = rev(unique(e0M_long$time_interval)))
 
 e0M_long <- e0M_long %>%
   filter(time_interval != "last.observed")
 
-p <- ggplot(e0M_long, aes(x = value, y = time_interval)) +
+p <- ggplot(e0M_long, aes(x = value, y = time_interval, fill = as.numeric(time_interval))) +
   geom_density_ridges(scale = 1, rel_min_height = 0.01, bandwidth = 2) +
   scale_x_continuous(breaks = seq(0, 100, by = 5)) +
+  scale_fill_gradientn(colours = rainbow(length(unique(e0M_long$time_interval)))) +
   theme_ridges() +
+  theme(legend.position = "none") +
   labs(title = "Joy Plot of e0M Data",
        x = "Values",
-       y = "Time Interval")
+       y = "Time Interval",
+       fill = "Time Interval")
 
 ggsave("joy_plot.png", plot = p, width = 12, height = 8)
 
