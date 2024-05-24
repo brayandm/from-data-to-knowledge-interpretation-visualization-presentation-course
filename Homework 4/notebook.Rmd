@@ -70,7 +70,7 @@ ggplot(data_long, aes(x = 2, y = percentage, fill = population_type)) +
        title = "Percentage of Spanish-born and Foreign-born Population by Region in Spain (2016)") +
   xlim(0.5, 2.5)
 
-ggsave("facet_donut_plot.png", width = 15, height = 8)
+ggsave("p1.png", width = 15, height = 8)
 ```
 
 ## EX 2: JOYPLOTS ########
@@ -117,7 +117,7 @@ p <- ggplot(e0M_long, aes(x = value, y = time_interval, fill = as.numeric(time_i
        y = "Time Interval",
        fill = "Time Interval")
 
-ggsave("joy_plot.png", plot = p, width = 12, height = 8)
+ggsave("p2.png", plot = p, width = 12, height = 8)
 
 print(p)
 ```
@@ -173,7 +173,7 @@ plot <- ggplot(data_long, aes(y = Household_Size, x = Proportion, color = Countr
   theme(axis.text.y = element_text(angle = 0, hjust = 1))
 
 # Save the plot as an image
-ggsave("faceted_lollipop_plot.png", plot, width = 15, height = 10)
+ggsave("p3.png", plot, width = 15, height = 10)
 print(plot)
 ```
 
@@ -212,7 +212,7 @@ plot <- ggplot(long_df, aes(x = T1, y = Value, color = Household_Size, fill = Ho
     plot.background = element_rect(fill = "white", color = NA)
   )
 
-ggsave("smoothed_dot_plot.png", plot, width = 12, height = 6)
+ggsave("p4.png", plot, width = 12, height = 6)
 
 print(plot)
 ```
