@@ -104,7 +104,8 @@ e0M_long <- e0M_long %>%
   filter(time_interval != "last.observed")
 
 p <- ggplot(e0M_long, aes(x = value, y = time_interval)) +
-  geom_density_ridges(scale = 1, rel_min_height = 0.01, bandwidth = 2) 
+  geom_density_ridges(scale = 1, rel_min_height = 0.01, bandwidth = 2) +
+  scale_x_continuous(breaks = seq(0, 100, by = 5)) +
   theme_ridges() +
   labs(title = "Joy Plot of e0M Data",
        x = "Values",
