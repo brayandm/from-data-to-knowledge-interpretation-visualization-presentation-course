@@ -81,7 +81,7 @@ ggsave("facet_donut_plot.png", width = 12, height = 8)
  https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html
  Save your plot as an image.
 
-```{r}
+```{r, cache = TRUE}
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -130,6 +130,51 @@ print(p)
  Save your plot as an image. 
 
 ```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(scales)
+
+# Read the CSV file
+data <- read.csv("data/CoDB_2021.csv")
+
+# Select relevant columns
+data <- data %>%
+  select(C2, HS01, HS12, HS13, HS14)
+
+# Rename columns for readability
+colnames(data) <- c("Country", "1P-Household", "2-3P-Household", "4-5P-Household", "6+P-Household")
+
+# Transform the data into long format
+data_long <- data %>%
+  pivot_longer(cols = ends_with("Household"), names_to = "Household_Size", values_to = "Proportion")
+
+# Calculate the proportion as a percentage
+data_long <- data_long %>%
+  mutate(Proportion = Proportion * 100)
+
+# Create the faceted lollipop plot with inverted axes
+plot <- ggplot(data_long, aes(y = Household_Size, x = Proportion, color = Country)) +
+  geom_segment(aes(y = Household_Size, yend = Household_Size, x = 0, xend = Proportion)) +
+  geom_point(size = 3) +
+  scale_x_continuous(labels = percent_format(scale = 1)) +
+  scale_y_discrete(limits = rev(levels(factor(data_long$Household_Size)))) +
+  facet_wrap(~ Country, scales = "free_x") +
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    legend.position = "none",
+  ) +
+  labs(title = "Proportion of Household Sizes by Country",
+       y = "Household Size",
+       x = "Proportion (%)") +
+  theme(axis.text.y = element_text(angle = 0, hjust = 1))
+
+# Save the plot as an image
+ggsave("faceted_lollipop_plot.png", plot, width = 15, height = 10)
+print(plot)
+
 ```
 
 ## Ex 4: SMOOTHED DOTS #####
