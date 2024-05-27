@@ -87,8 +87,6 @@ print(paste("CRS:", crs_BCN))
 bbox_BCN <- st_bbox(BCN)
 print(paste("Bounding box:", bbox_BCN))
 
-print(names(BCN))
-
 BCN_districts <- BCN %>%
   group_by(NAME) %>%
   summarise(geometry = st_union(geometry)) %>%
@@ -96,8 +94,12 @@ BCN_districts <- BCN %>%
 
 BCN_districts$centroid <- st_centroid(BCN_districts$geometry)
 
+base_palette <- brewer.pal(n = 12, name = "Set3")
+color_palette <- colorRampPalette(base_palette)(length(unique(BCN_districts$NAME)))
+
 map <- ggplot() +
-  geom_sf(data = BCN, fill = "lightblue", color = "white", lwd = 0.2) +
+  geom_sf(data = BCN, aes(fill = NAME), color = "white", lwd = 0.2) +
+  scale_fill_manual(values = color_palette) +
   geom_sf(data = BCN_districts, fill = NA, color = "black", lwd = 0.5) +
   geom_text_repel(data = BCN_districts, aes(label = NAME, geometry = centroid),
                   stat = "sf_coordinates", size = 3, min.segment.length = 0) +
@@ -112,8 +114,6 @@ map <- ggplot() +
     panel.background = element_rect(fill = "white", color = NA)
   ) +
   labs(title = "Districts and Census Tracts of Barcelona")
-
-print(map)
 
 ggsave("plot2.png", plot = map, width = 10, height = 8)
 ```
