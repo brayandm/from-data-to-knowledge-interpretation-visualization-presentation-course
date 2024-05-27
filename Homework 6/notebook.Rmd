@@ -18,25 +18,40 @@ instructor,please.)
 ```{r}
 library(sf)
 library(tidyverse)
+library(ggrepel)
+library(RColorBrewer)
 
-esp <- read_sf(dsn = ".", "ESP_adm2") 
-
-st_crs(esp)
-
-st_bbox(esp)
-
-esp|>sapply(class)
+esp <- read_sf(dsn = ".", "ESP_adm2")
 
 esp_simply <- st_simplify(esp, preserveTopology = TRUE, dTolerance = 1000)
 
-ggplot()+
-  geom_sf(data=esp_simply)
+canarias <- esp_simply |> filter(NAME_1 == "Islas Canarias")
 
-canarias<-esp_simply|>
-  filter(NAME_1 == "Islas Canarias")
+rest_of_spain <- esp_simply |> filter(NAME_1 != "Islas Canarias")
 
-ggplot()+
-  geom_sf(data=canarias)
+canarias_g <- st_geometry(canarias)
+
+canarias_g <- canarias_g + c(5, 7.5)
+
+st_crs(canarias_g) <- st_crs(esp)
+
+canarias <- st_set_geometry(canarias, canarias_g)
+esp_simply <- bind_rows(canarias, rest_of_spain)
+
+base_palette <- brewer.pal(n = 12, name = "Set3")
+color_palette <- colorRampPalette(base_palette)(length(unique(esp_simply$NAME_1)))
+
+ggplot(data = esp_simply) +
+  geom_sf(aes(fill = NAME_1), color = "white", lwd = 0.2) +
+  scale_fill_manual(values = color_palette) +
+  geom_text_repel(data = esp_simply, aes(label = NAME_2, geometry = geometry),
+                  stat = "sf_coordinates", size = 3, min.segment.length = 0) +
+  theme_minimal() +
+  theme(legend.position = "none", 
+        axis.title = element_blank(), 
+        axis.text = element_blank(), 
+        axis.ticks = element_blank())
+
 ```
 
 # Consolidation exercise 2 #######
