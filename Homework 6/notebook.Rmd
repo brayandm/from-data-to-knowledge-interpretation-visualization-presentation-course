@@ -1,0 +1,31 @@
+---
+title: "Homework 6"
+author: "Brayan Duran Medina"
+output: html_document
+---
+
+# Consolidation exercise 1 ########
+
+1. Read ESP_adm2 into R. 
+2. Move the Canary Island to a convenient place close to peninsular Spain.Hint: c(5,7.5) 
+3. Save your new sf object as a shapefile.
+3. Create a discrete map of Spain filling polygons belonging to same region 
+(Hint: NAME_1) with the same color. Also Add labels with the name of the provinces. 
+Your map should look similar to the one below. (NOTE: the instructor is a lazy 
+guy and he used the default color palette from ggplot. Don't be as lazy as the 
+instructor,please.)
+
+```{r}
+```
+
+# Consolidation exercise 2 #######
+1. In folder of data you will find the shapefile **BCN_CT** (Barcelona by census tracts). Read it into R under the name **BCN** and plot it. 
+2. Answer the following questions: 
+  + 2.1 By how many polygons is this shapefile composed?
+  + 2.2 Which is the CRS associated to this shapefile? 
+  + 2.3 Which is the bounding box (bbox) corresponding to this shapefile? 
+3. Create a new sf object with the division by districts of Barcelona. 
+4. Create a Multi-Layer map of Barcelona by census tract overlaying the districts boundaries and adding the name of each district on its centroid. Save your final map as an image. 
+
+```{r}
+```
