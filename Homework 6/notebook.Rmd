@@ -56,7 +56,7 @@ plot <- ggplot(data = esp_simply) +
     panel.background = element_rect(fill = "white", color = NA) 
         )
 
-ggsave("plot1.png", plot, width = 10, height = 10, units = "cm")
+ggsave("plot1.png", plot, width = 20, height = 20, units = "cm")
 ```
 
 # Consolidation exercise 2 #######
