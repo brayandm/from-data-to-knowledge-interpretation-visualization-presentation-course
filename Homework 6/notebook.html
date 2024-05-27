@@ -368,20 +368,9 @@ of the provinces. Your map should look similar to the one below. (NOTE:
 the instructor is a lazy guy and he used the default color palette from
 ggplot. Don’t be as lazy as the instructor,please.)</li>
 </ol>
-<pre class="r"><code>library(sf)</code></pre>
-<pre><code>## Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</code></pre>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-## ✔ purrr     1.0.2</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>library(ggrepel)
+<pre class="r"><code>library(sf)
+library(tidyverse)
+library(ggrepel)
 library(RColorBrewer)
 
 esp &lt;- read_sf(dsn = &quot;.&quot;, &quot;ESP_adm2&quot;)
@@ -417,7 +406,8 @@ plot &lt;- ggplot(data = esp_simply) +
         panel.grid.major = element_blank(), 
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = &quot;white&quot;, color = NA) 
-        )
+        ) +
+    labs(title = &quot;Provinces of Spain&quot;)
 
 ggsave(&quot;plot1.png&quot;, plot, width = 20, height = 20, units = &quot;cm&quot;)</code></pre>
 <pre><code>## Warning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not
@@ -477,7 +467,7 @@ color_palette &lt;- colorRampPalette(base_palette)(length(unique(BCN_districts$N
 map &lt;- ggplot() +
   geom_sf(data = BCN, aes(fill = NAME), color = &quot;white&quot;, lwd = 0.2) +
   scale_fill_manual(values = color_palette) +
-  geom_sf(data = BCN_districts, fill = NA, color = &quot;black&quot;, lwd = 0.5) +
+  geom_sf(data = BCN_districts, fill = NA, color = &quot;gray&quot;, lwd = 0.5) +
  geom_text_repel(data = BCN_districts, aes(label = NAME, geometry = centroid),
                   stat = &quot;sf_coordinates&quot;, size = 4, min.segment.length = 0, color = &quot;black&quot;,
                   bg.color = &quot;white&quot;, bg.r = 0.15) +
