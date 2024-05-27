@@ -31,6 +31,12 @@ esp_simply <- st_simplify(esp, preserveTopology = TRUE, dTolerance = 1000)
 
 ggplot()+
   geom_sf(data=esp_simply)
+
+canarias<-esp_simply|>
+  filter(NAME_1 == "Islas Canarias")
+
+ggplot()+
+  geom_sf(data=canarias)
 ```
 
 # Consolidation exercise 2 #######
