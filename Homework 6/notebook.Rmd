@@ -41,7 +41,7 @@ esp_simply <- bind_rows(canarias, rest_of_spain)
 base_palette <- brewer.pal(n = 12, name = "Set3")
 color_palette <- colorRampPalette(base_palette)(length(unique(esp_simply$NAME_1)))
 
-ggplot(data = esp_simply) +
+plot <- ggplot(data = esp_simply) +
   geom_sf(aes(fill = NAME_1), color = "white", lwd = 0.2) +
   scale_fill_manual(values = color_palette) +
   geom_text_repel(data = esp_simply, aes(label = NAME_2, geometry = geometry),
@@ -50,8 +50,13 @@ ggplot(data = esp_simply) +
   theme(legend.position = "none", 
         axis.title = element_blank(), 
         axis.text = element_blank(), 
-        axis.ticks = element_blank())
+        axis.ticks = element_blank(),
+        panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "white", color = NA) 
+        )
 
+ggsave("plot1.png", plot, width = 10, height = 10, units = "cm")
 ```
 
 # Consolidation exercise 2 #######
