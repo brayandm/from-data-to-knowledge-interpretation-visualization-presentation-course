@@ -15,7 +15,7 @@ Your map should look similar to the one below. (NOTE: the instructor is a lazy
 guy and he used the default color palette from ggplot. Don't be as lazy as the 
 instructor,please.)
 
-```{r}
+```{r, cache = TRUE}
 library(sf)
 library(tidyverse)
 library(ggrepel)
@@ -68,5 +68,52 @@ ggsave("plot1.png", plot, width = 20, height = 20, units = "cm")
 3. Create a new sf object with the division by districts of Barcelona. 
 4. Create a Multi-Layer map of Barcelona by census tract overlaying the districts boundaries and adding the name of each district on its centroid. Save your final map as an image. 
 
-```{r}
+```{r, cache = TRUE}
+library(sf)
+library(tidyverse)
+library(ggrepel)
+library(RColorBrewer)
+
+BCN <- read_sf(dsn = ".", layer = "BCN_CT")
+
+plot(st_geometry(BCN))
+
+num_polygons <- nrow(BCN)
+print(paste("Number of polygons:", num_polygons))
+
+crs_BCN <- st_crs(BCN)
+print(paste("CRS:", crs_BCN))
+
+bbox_BCN <- st_bbox(BCN)
+print(paste("Bounding box:", bbox_BCN))
+
+print(names(BCN))
+
+BCN_districts <- BCN %>%
+  group_by(NAME) %>%
+  summarise(geometry = st_union(geometry)) %>%
+  ungroup()
+
+BCN_districts$centroid <- st_centroid(BCN_districts$geometry)
+
+map <- ggplot() +
+  geom_sf(data = BCN, fill = "lightblue", color = "white", lwd = 0.2) +
+  geom_sf(data = BCN_districts, fill = NA, color = "black", lwd = 0.5) +
+  geom_text_repel(data = BCN_districts, aes(label = NAME, geometry = centroid),
+                  stat = "sf_coordinates", size = 3, min.segment.length = 0) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.title = element_blank(), 
+    axis.text = element_blank(), 
+    axis.ticks = element_blank(), 
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "white", color = NA)
+  ) +
+  labs(title = "Districts and Census Tracts of Barcelona")
+
+print(map)
+
+ggsave("plot2.png", plot = map, width = 10, height = 8)
 ```
