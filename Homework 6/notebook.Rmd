@@ -16,6 +16,21 @@ guy and he used the default color palette from ggplot. Don't be as lazy as the
 instructor,please.)
 
 ```{r}
+library(sf)
+library(tidyverse)
+
+esp <- read_sf(dsn = ".", "ESP_adm2") 
+
+st_crs(esp)
+
+st_bbox(esp)
+
+esp|>sapply(class)
+
+esp_simply <- st_simplify(esp, preserveTopology = TRUE, dTolerance = 1000)
+
+ggplot()+
+  geom_sf(data=esp_simply)
 ```
 
 # Consolidation exercise 2 #######
