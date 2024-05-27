@@ -478,8 +478,9 @@ map &lt;- ggplot() +
   geom_sf(data = BCN, aes(fill = NAME), color = &quot;white&quot;, lwd = 0.2) +
   scale_fill_manual(values = color_palette) +
   geom_sf(data = BCN_districts, fill = NA, color = &quot;black&quot;, lwd = 0.5) +
-  geom_text_repel(data = BCN_districts, aes(label = NAME, geometry = centroid),
-                  stat = &quot;sf_coordinates&quot;, size = 3, min.segment.length = 0) +
+ geom_text_repel(data = BCN_districts, aes(label = NAME, geometry = centroid),
+                  stat = &quot;sf_coordinates&quot;, size = 4, min.segment.length = 0, color = &quot;black&quot;,
+                  bg.color = &quot;white&quot;, bg.r = 0.15) +
   theme_minimal() +
   theme(
     legend.position = &quot;none&quot;,
