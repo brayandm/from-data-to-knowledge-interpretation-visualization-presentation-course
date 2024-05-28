@@ -1,0 +1,41 @@
+---
+title: "Homework 7"
+author: "Brayan Duran Medina"
+output: html_document
+---
+
+# CONSOLIDATION EXCERCISE 1: choropleth maps
+
+1 - Read “violence_women.csv” file into R.
+
+2 - Join the csv data to your world sf object.
+
+3 - Replace NA values in column value with zeros. Hint:
+
+shp_violence$Value[is.na(shp_violence$Value)] <- 0
+
+4 - Create some pretty breaks for your data, as the ones in the image below. Equal 0 to No Data.
+
+5 - Create a color palette for your map and plot in showing only the cases of Europe, as in the image below.
+
+6 - Save your map as an image.
+
+```{r}
+```
+
+# CONSOLIDATION EXCERCISE 2: heatmaps
+
+File AIRBNB_BCN.Rdata contains information about the AirBnB offers in the city of Barcelona. bcn_districts.shp is a shapefile with the delimitation by districts of Barcelona.
+
+1 - Read both files into R and answer the following questions: Do this sf object have the same CRS? Act in consequence.
+
+2 - Produce a heatmap with the location of the airbnb accomodations.
+
+3 - Add a map tile as map background and the delimitation of the districts.
+
+4 - Focus the final map on the city centre, as shown in the map below.
+
+5 - Save your map as an image.
+
+```{r}
+```
