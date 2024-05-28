@@ -91,20 +91,22 @@ register_stadiamaps(stadia_api_key)
 bcn_map <- get_stadiamap(bbox = c(left = 2.10, bottom = 41.36, right = 2.25, top = 41.43), zoom = 13, maptype = "stamen_toner_lite")
 
 heatmap <- ggmap(bcn_map) +
-  geom_sf(data = bcn_districts, fill = NA, color = "black", size = 0.5, inherit.aes = FALSE) +
   stat_density2d(
     aes(x = st_coordinates(airbnb_sf)[,1], y = st_coordinates(airbnb_sf)[,2], fill = ..level..),
     geom = "polygon",
     data = as.data.frame(st_coordinates(airbnb_sf)),
-    alpha = 0.5,
+    alpha = 0.3,  
     inherit.aes = FALSE
   ) +
   scale_fill_gradient(low = "blue", high = "red") +
-  labs(title = "Mapa de Calor de Ubicaciones de AirBnB en Barcelona",
-       x = "Longitud", y = "Latitud")
+  geom_sf(data = bcn_districts, fill = NA, color = "black", size = 0.5, inherit.aes = FALSE) +
+  geom_sf_text(data = bcn_districts, aes(label = NOM), size = 5, color = "black", inherit.aes = FALSE, 
+               bg.color = "white", bg.r = 0.1) +
+  labs(title = "AIRBNB Accomodations in Barcelona 2022",
+       x = "Longitude", y = "Latitude") +
+  theme(plot.title = element_text(size = 16, face = "bold"))
 
 print(heatmap)
 
 ggsave("AirBnB_Heatmap_Barcelona.png", plot = heatmap, width = 10, height = 8)
-
 ```
