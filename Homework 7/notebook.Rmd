@@ -41,15 +41,18 @@ breaks <- c(-0.01, 0, 10, 15, 20, 25, 30, 35, 100)
 labels <- c("No Data", "<10%", "10-15%", "15-20%", "20-25%", "25-30%", "30-35%", ">35%")
 
 palette <- brewer.pal(n = 7, name = "YlOrRd")
+
 europe_map <- ggplot(data = world) +
   geom_sf(aes(fill = cut(Value, breaks = breaks, labels = labels, include.lowest = TRUE)), color = "black") +
   scale_fill_manual(values = c("gray50", palette), na.value = "gray50", name = "Violence against Women") +
   labs(title = "Prevalence of Lifetime Violence against Women in Europe", subtitle = "Data Source: violence_women.csv") +
-  theme_minimal()
+  theme_minimal() +
+  coord_sf(xlim = c(-5, 45), ylim = c(30, 70), expand = FALSE)
 
 print(europe_map)
 
-ggsave("Europe_Violence_Against_Women_Map.png", plot = europe_map)
+ggsave("Europe_Violence_Against_Women_Map.png", plot = europe_map, width = 10, height = 10)
+
 
 ```
 
