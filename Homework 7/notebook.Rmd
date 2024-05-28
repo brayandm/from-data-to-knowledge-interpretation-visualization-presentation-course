@@ -21,30 +21,35 @@ shp_violence$Value[is.na(shp_violence$Value)] <- 0
 6 - Save your map as an image.
 
 ```{r, cache=TRUE}
+library(tidyverse)
 library(giscoR)
 library(sf)
+library(classInt)
 library(ggplot2)
-library(dplyr)
 library(RColorBrewer)
-library(tidyverse)
+
+violence_w <- read.csv("data/violence_women.csv")
 
 res <- "03"
 target_crs <- 4326
+world <- gisco_get_countries(resolution = res, epsg = target_crs)
+world <- left_join(world, violence_w, by = c("ISO3_CODE" = "ISO3_CODE"))
 
-world <- gisco_get_countries(
-  resolution = res, region = NULL,
-  epsg = target_crs
-)
-st_crs(world)
+world$Value[is.na(world$Value)] <- 0
 
-ggplot(data = world) +
-  geom_sf()
-```
+breaks <- classIntervals(world$Value, n = 5, style = "jenks")
+breaks$brks[1] <- 0 
 
-```{r, cache=TRUE}
-violence_w <- read.csv("data/violence_women.csv")
+palette <- brewer.pal(n = 5, name = "YlOrRd")
+europe_map <- ggplot(data = world) +
+  geom_sf(aes(fill = cut(Value, breaks = breaks$brks)), color = "black") +
+  scale_fill_manual(values = palette, na.value = "gray50", name = "Violence against Women") +
+  labs(title = "Prevalence of Lifetime Violence against Women in Europe", subtitle = "Data Source: violence_women.csv") +
+  theme_minimal()
 
-head(violence_w)
+print(europe_map)
+
+ggsave("Europe_Violence_Against_Women_Map.png", plot = europe_map)
 ```
 
 # CONSOLIDATION EXCERCISE 2: heatmaps
