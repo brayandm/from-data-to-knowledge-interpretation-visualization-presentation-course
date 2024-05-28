@@ -45,7 +45,7 @@ palette <- brewer.pal(n = 7, name = "YlOrRd")
 europe_map <- ggplot(data = world) +
   geom_sf(aes(fill = cut(Value, breaks = breaks, labels = labels, include.lowest = TRUE)), color = "black") +
   scale_fill_manual(values = c("gray50", palette), na.value = "gray50", name = "Violence against Women") +
-  labs(title = "Prevalence of Lifetime Violence against Women in Europe", subtitle = "Data Source: violence_women.csv") +
+  labs(title = "Prevalence of Lifetime Violence against Women in Europe 2020", subtitle = "Data Source: violence_women.csv") +
   theme_minimal() +
   coord_sf(xlim = c(-15, 45), ylim = c(30, 70), expand = FALSE)
 
@@ -95,7 +95,7 @@ heatmap <- ggplot() +
     alpha = 0.5
   ) +
   scale_fill_gradient(low = "blue", high = "red") +
-  labs(title = "Mapa de Calor de Ubicaciones de AirBnB en Barcelona",
+  labs(title = "AIRBNB Accomodations in Barcelona 2022", subtitle = "Data Source: AIRBNB_BCN.Rdata",
        x = "Longitud", y = "Latitud")
 
 print(heatmap)
