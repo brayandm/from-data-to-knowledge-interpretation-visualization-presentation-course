@@ -35,21 +35,22 @@ target_crs <- 4326
 world <- gisco_get_countries(resolution = res, epsg = target_crs)
 world <- left_join(world, violence_w, by = c("ISO3_CODE" = "ISO3_CODE"))
 
-world$Value[is.na(world$Value)] <- 0
+# world$Value[is.na(world$Value)] <- 0
 
-breaks <- classIntervals(world$Value, n = 5, style = "jenks")
-breaks$brks[1] <- 0 
+breaks <- c(0, 10, 15, 20, 25, 30, 35, 100)
+labels <- c("<10%", "10-15%", "15-20%", "20-25%", "25-30%", "30-35%", ">35%")
 
-palette <- brewer.pal(n = 5, name = "YlOrRd")
+palette <- brewer.pal(n = 7, name = "YlOrRd")
 europe_map <- ggplot(data = world) +
-  geom_sf(aes(fill = cut(Value, breaks = breaks$brks)), color = "black") +
-  scale_fill_manual(values = palette, na.value = "gray50", name = "Violence against Women") +
+  geom_sf(aes(fill = cut(Value, breaks = breaks, labels = labels, include.lowest = TRUE)), color = "black") +
+  scale_fill_manual(values = c(palette, "gray50"), na.value = "gray50", name = "Violence against Women") +
   labs(title = "Prevalence of Lifetime Violence against Women in Europe", subtitle = "Data Source: violence_women.csv") +
   theme_minimal()
 
 print(europe_map)
 
 ggsave("Europe_Violence_Against_Women_Map.png", plot = europe_map)
+
 ```
 
 # CONSOLIDATION EXCERCISE 2: heatmaps
