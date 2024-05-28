@@ -88,7 +88,7 @@ if (st_crs(bcn_districts) != st_crs(airbnb_sf)) {
 stadia_api_key <- ""
 register_stadiamaps(stadia_api_key)
 
-bcn_map <- get_stadiamap(bbox = c(left = 2.13, bottom = 41.36, right = 2.19, top = 41.41), zoom = 13, maptype = "stamen_toner_lite")
+bcn_map <- get_stadiamap(bbox = c(left = 2.10, bottom = 41.36, right = 2.25, top = 41.43), zoom = 13, maptype = "stamen_toner_lite")
 
 heatmap <- ggmap(bcn_map) +
   geom_sf(data = bcn_districts, fill = NA, color = "black", size = 0.5, inherit.aes = FALSE) +
