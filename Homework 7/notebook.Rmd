@@ -20,7 +20,25 @@ shp_violence$Value[is.na(shp_violence$Value)] <- 0
 
 6 - Save your map as an image.
 
-```{r}
+```{r, cache=TRUE}
+library(giscoR)
+library(sf)
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(tidyverse)
+
+res <- "03"
+target_crs <- 4326
+
+world <- gisco_get_countries(
+  resolution = res, region = NULL,
+  epsg = target_crs
+)
+st_crs(world)
+
+ggplot(data = world) +
+  geom_sf()
 ```
 
 # CONSOLIDATION EXCERCISE 2: heatmaps
