@@ -1,0 +1,66 @@
+---
+title: "Dataviz"
+author: "Brayan Duran Medina"
+output: html_document
+---
+
+Considering your current understanding of perception mechanisms and gestalt principles, kindly generate a graph to support the following statement.
+
+
+Among the G7 nations (Canada, France, Germany, Italy, Japan, the United Kingdom, and the United States), the most notable advancement in terms of rising life expectancy over the 50-year period from 1947 to 2007 occurred in Japan. In 1947, Japan had the lowest life expectancy at birth among the G7 countries, standing at 51.5 years. However, by 2007, Japan had surpassed the other G7 nations, boasting a life expectancy of 82.5 years. A remarkable surge of nearly 31 years in life expectancy over the span of five decades.
+
+Find the data you need for this challenge in the data folder of today’s material under the name data_ass4.Rda
+
+```{r, cache = TRUE}
+library(ggplot2)
+library(dplyr)
+
+load("df_s4.Rda")
+
+g7_countries <- c("Canada", "France", "Germany", "Italy", "Japan", "United Kingdom", "United States")
+g7_data <- df_s4 %>% filter(Entity %in% g7_countries)
+
+g7_data$Entity <- factor(g7_data$Entity, levels = c("Japan", setdiff(g7_countries, "Japan")))
+
+g7_data_1947 <- g7_data %>% filter(Year == 1947)
+g7_data_2007 <- g7_data %>% filter(Year == 2007)
+
+japan_life_expectancy <- data.frame(
+  Year = c(1947, 2007),
+  LifeExpectancy = c(g7_data_1947 %>% filter(Entity == "Japan") %>% pull(life_expectancy),
+                     g7_data_2007 %>% filter(Entity == "Japan") %>% pull(life_expectancy))
+)
+
+soft_colors <- c("Canada" = "#D98D8D", "France" = "#E6E695", "Germany" = "#A4D3A2", "Italy" = "#C4A1D1", 
+                   "Japan" = "red", "United Kingdom" = "#E6B477", "United States" = "#92B3D1")
+
+plot <- ggplot() +
+  geom_line(data = g7_data, aes(x = Year, y = life_expectancy, color = Entity, group = Entity), size = 0.5) +
+  geom_line(data = g7_data %>% filter(Entity == "Japan"), aes(x = Year, y = life_expectancy, group = Entity), color = "red", size = 1.2) +
+  geom_point(data = japan_life_expectancy, aes(x = Year, y = LifeExpectancy), color = "red", size = 3) +
+  geom_text(data = japan_life_expectancy %>% filter(Year == 1947), 
+            aes(x = Year, y = LifeExpectancy, label = round(LifeExpectancy, 1)), 
+            vjust = 2, color = "red") +
+  geom_text(data = japan_life_expectancy %>% filter(Year == 2007), 
+            aes(x = Year, y = LifeExpectancy, label = round(LifeExpectancy, 1)), 
+            vjust = -1, color = "red") +
+  scale_color_manual(values = soft_colors) +
+  scale_x_continuous(breaks = seq(1945, 2005, 5), limits = c(1947, 2007)) +
+  scale_y_continuous(breaks = seq(50, 85, 5), limits = c(50, 85)) +
+  labs(title = "Notable Increase in Life Expectancy in Japan Among G7 Nations (1947-2007)",
+       x = NULL, 
+       y = "Life Expectancy",
+       color = "Country") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+  plot.title = element_text(size = 11, face = "bold", hjust = 0.5, vjust = 1, margin = margin(t = 10, b = 10)),
+  panel.background = element_rect(fill = "white", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+  ) +
+  annotate("text", x = 1975, y = 76, label = "Japan", color = "red", angle = 21, size = 4, hjust = 0.5)
+
+
+ggsave("plot.png", plot, width = 8, height = 6)
+
+print(plot)
+```
