@@ -47,7 +47,7 @@ europe_map <- ggplot(data = world) +
   scale_fill_manual(values = c("gray50", palette), na.value = "gray50", name = "Violence against Women") +
   labs(title = "Prevalence of Lifetime Violence against Women in Europe", subtitle = "Data Source: violence_women.csv") +
   theme_minimal() +
-  coord_sf(xlim = c(-20, 45), ylim = c(30, 70), expand = FALSE)
+  coord_sf(xlim = c(-15, 45), ylim = c(30, 70), expand = FALSE)
 
 print(europe_map)
 
