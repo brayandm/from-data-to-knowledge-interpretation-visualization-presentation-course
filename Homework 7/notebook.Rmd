@@ -52,8 +52,6 @@ europe_map <- ggplot(data = world) +
 print(europe_map)
 
 ggsave("Europe_Violence_Against_Women_Map.png", plot = europe_map, width = 10, height = 10)
-
-
 ```
 
 # CONSOLIDATION EXCERCISE 2: heatmaps
