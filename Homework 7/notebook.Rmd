@@ -90,19 +90,22 @@ register_stadiamaps(stadia_api_key)
 
 bcn_map <- get_stadiamap(bbox = c(left = 2.10, bottom = 41.36, right = 2.25, top = 41.43), zoom = 13, maptype = "stamen_toner_lite")
 
+bcn_districts_df <- st_as_sf(bcn_districts)
+bcn_districts_df <- cbind(bcn_districts_df, st_coordinates(st_centroid(bcn_districts_df)))
+
 heatmap <- ggmap(bcn_map) +
   stat_density2d(
     aes(x = st_coordinates(airbnb_sf)[,1], y = st_coordinates(airbnb_sf)[,2], fill = ..level..),
     geom = "polygon",
     data = as.data.frame(st_coordinates(airbnb_sf)),
-    alpha = 0.3,  
+    alpha = 0.3,
     inherit.aes = FALSE
   ) +
   scale_fill_gradient(low = "blue", high = "red") +
   geom_sf(data = bcn_districts, fill = NA, color = "black", size = 0.5, inherit.aes = FALSE) +
-  geom_sf_text(data = bcn_districts, aes(label = NOM), size = 5, color = "black", inherit.aes = FALSE, 
-               bg.color = "white", bg.r = 0.1) +
-  labs(title = "AIRBNB Accomodations in Barcelona 2022",
+  geom_label(data = bcn_districts_df, aes(x = X, y = Y, label = NOM), 
+             size = 3, color = "black", fill = "gray", label.size = NA, inherit.aes = FALSE) +
+  labs(title = "AIRBNB Accommodations in Barcelona 2022",
        x = "Longitude", y = "Latitude") +
   theme(plot.title = element_text(size = 16, face = "bold"))
 
