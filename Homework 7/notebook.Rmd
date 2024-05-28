@@ -71,14 +71,13 @@ File AIRBNB_BCN.Rdata contains information about the AirBnB offers in the city o
 ```{r, cache=TRUE}
 library(sf)
 library(ggplot2)
-library(ggmap)
 library(dplyr)
+library(prettymapr)
+library(ggspatial)
+library(ggmap)
 
 load("data/AIRBNB_BCN.Rdata")
 bcn_districts <- st_read("data/bcn_districts.shp")
-
-head(AIRBNB_BCN)
-head(bcn_districts)
 
 airbnb_sf <- st_as_sf(AIRBNB_BCN, coords = c("longitude", "latitude"), crs = 4326)
 
@@ -86,19 +85,26 @@ if (st_crs(bcn_districts) != st_crs(airbnb_sf)) {
   bcn_districts <- st_transform(bcn_districts, st_crs(airbnb_sf))
 }
 
-heatmap <- ggplot() +
-  geom_sf(data = bcn_districts, fill = "white", color = "black", size = 0.5) +
+stadia_api_key <- ""
+register_stadiamaps(stadia_api_key)
+
+bcn_map <- get_stadiamap(bbox = c(left = 2.13, bottom = 41.36, right = 2.19, top = 41.41), zoom = 13, maptype = "stamen_toner_lite")
+
+heatmap <- ggmap(bcn_map) +
+  geom_sf(data = bcn_districts, fill = NA, color = "black", size = 0.5, inherit.aes = FALSE) +
   stat_density2d(
     aes(x = st_coordinates(airbnb_sf)[,1], y = st_coordinates(airbnb_sf)[,2], fill = ..level..),
     geom = "polygon",
     data = as.data.frame(st_coordinates(airbnb_sf)),
-    alpha = 0.5
+    alpha = 0.5,
+    inherit.aes = FALSE
   ) +
   scale_fill_gradient(low = "blue", high = "red") +
-  labs(title = "AIRBNB Accomodations in Barcelona 2022", subtitle = "Data Source: AIRBNB_BCN.Rdata",
+  labs(title = "Mapa de Calor de Ubicaciones de AirBnB en Barcelona",
        x = "Longitud", y = "Latitud")
 
 print(heatmap)
 
 ggsave("AirBnB_Heatmap_Barcelona.png", plot = heatmap, width = 10, height = 8)
+
 ```
