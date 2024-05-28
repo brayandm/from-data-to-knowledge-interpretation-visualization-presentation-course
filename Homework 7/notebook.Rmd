@@ -41,6 +41,12 @@ ggplot(data = world) +
   geom_sf()
 ```
 
+```{r, cache=TRUE}
+violence_w <- read.csv("data/violence_women.csv")
+
+head(violence_w)
+```
+
 # CONSOLIDATION EXCERCISE 2: heatmaps
 
 File AIRBNB_BCN.Rdata contains information about the AirBnB offers in the city of Barcelona. bcn_districts.shp is a shapefile with the delimitation by districts of Barcelona.
