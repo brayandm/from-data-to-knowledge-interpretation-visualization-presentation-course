@@ -3,3 +3,85 @@ title: "Homework 8"
 author: "Brayan Duran Medina"
 output: html_document
 ---
+
+## CONSOLIDATION EXERCISE 1: HEXABIN MAP
+
+In folder CONSOLIDATION_EX1 you will find a shapefile with the delimitation by neighborhoods of the municipality 
+of Madrid, a shapefile with the municipal delimitation of Madrid and a shapefile with the locations of bars in 
+Madrid as recorded in Open Street Maps. Your tasks are:
+
+1 - To read these 3 shapefiles into R.
+
+2 - Do these files share the same CRS? Whatever is the case, transform everything to CRS = 4326.
+
+3 - Create an hexabin map using the location of the bars. Use a map tile for your final map and add two or 
+three labels indicating the neighborhoods we must visit the next time we are in Madrid in case we want
+ to have a handful of bars around. Save your final map as an image.
+
+```{r} 
+```
+
+## CONSOLIDATION EXERCISE 2: MARE NOSTRU MARE MORTUM
+In the folder CONSOLIDATION_EX2 you will find the file Missing_Migrants.xlsx, please read it into R and perform the following tasks. HINT: library(readxl); data <- read_excel()
+
+1 - Filter cases where “Region_Incident” is equal to Mediterranean.
+
+2 - Drop those cases where “Coordinates” is equal to NA. Hint: drop_na()
+
+3 - To need to separate the coordinates into two columns. You can use the following expression:
+
+```
+# medi$lon<-as.numeric(sub("^.*?,", "",  medi$Coordinates))
+# medi$lat<-as.numeric(gsub(",.*$", "", medi$Coordinates))
+```
+
+4 - Change the name of column 8 to “deaths”. Hint: colnames().
+
+5 - Drop those cases where deaths is equal to NA.
+6 - Filter cases deaths >0.
+
+7 - Create categories for deaths as the ones in the map below.
+
+8 - Convert your dataframe to a sf object. Hint:st_as_sf
+
+9 - Get a map of the world. Hint: giscoR.
+
+```
+library(giscoR)
+res <- "03"
+target_crs <- 4326
+world <- gisco_get_countries(
+  resolution = res, region = NULL,
+  epsg = target_crs
+)
+```
+
+10 - Plot a bubble map as the one below. It’s not mandatory to replicate the aesthetics of the map below.
+
+```{r}
+```
+
+## CONSOLIDATION EXERCISE 3: CARTOGRAMS.
+Find the materials for this exercise in folder CONSOLIDATION_EX3.
+
+1 - Read shapefile world into R.
+
+2 - Read csv file births into R.
+
+3 - Format variable iso_n3 in births so it has the same format as in world. Hint: use function sprintf(“%.3d”,df$variable)
+
+4 - Join data from births to sf world.
+
+5 - Replace NAs in variable births with value 100.
+
+6 - Replace NAs in variable gdp_md_est with value 10.
+
+7 - Create three different cartograms using variables Births, pop_est and gdp_md_est. Set argument itermax equal to 7 
+in all cases.
+
+8 - Add a new column called facets to sf world and to the the three cartograms. In each sf set its corresponding label:
+ world, Births, Population and GDP estimate. Row bind sf world and your three cartograms. Create a facet map using
+  variable continent as fill variable and save it as an image.
+
+```{r}
+```
