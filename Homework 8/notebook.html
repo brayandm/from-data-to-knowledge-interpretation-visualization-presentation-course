@@ -370,6 +370,32 @@ tile for your final map and add two or three labels indicating the
 neighborhoods we must visit the next time we are in Madrid in case we
 want to have a handful of bars around. Save your final map as an
 image.</p>
+<pre class="r"><code>library(sf)</code></pre>
+<pre><code>## Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</code></pre>
+<pre class="r"><code>library(sp)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(ggspatial)
+library(ggmap)</code></pre>
+<pre><code>## ℹ Google&#39;s Terms of Service: &lt;https://mapsplatform.google.com&gt;
+##   Stadia Maps&#39; Terms of Service: &lt;https://stadiamaps.com/terms-of-service/&gt;
+##   OpenStreetMap&#39;s Tile Usage Policy: &lt;https://operations.osmfoundation.org/policies/tiles/&gt;
+## ℹ Please cite ggmap if you use it! Use `citation(&quot;ggmap&quot;)` for details.</code></pre>
+<pre class="r"><code>library(raster)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;raster&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     select</code></pre>
+<pre class="r"><code>library(hexbin)</code></pre>
 </div>
 <div id="consolidation-exercise-2-mare-nostru-mare-mortum" class="section level2">
 <h2>CONSOLIDATION EXERCISE 2: MARE NOSTRU MARE MORTUM</h2>

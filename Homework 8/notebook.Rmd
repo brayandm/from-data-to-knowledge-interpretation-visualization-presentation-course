@@ -18,7 +18,15 @@ Madrid as recorded in Open Street Maps. Your tasks are:
 three labels indicating the neighborhoods we must visit the next time we are in Madrid in case we want
  to have a handful of bars around. Save your final map as an image.
 
-```{r} 
+```{r, cache=TRUE} 
+library(sf)
+library(sp)
+library(dplyr)
+library(ggplot2)
+library(ggspatial)
+library(ggmap)
+library(raster)
+library(hexbin)
 ```
 
 ## CONSOLIDATION EXERCISE 2: MARE NOSTRU MARE MORTUM
@@ -58,7 +66,7 @@ world <- gisco_get_countries(
 
 10 - Plot a bubble map as the one below. It’s not mandatory to replicate the aesthetics of the map below.
 
-```{r}
+```{r, cache=TRUE} 
 ```
 
 ## CONSOLIDATION EXERCISE 3: CARTOGRAMS.
@@ -83,5 +91,5 @@ in all cases.
  world, Births, Population and GDP estimate. Row bind sf world and your three cartograms. Create a facet map using
   variable continent as fill variable and save it as an image.
 
-```{r}
+```{r, cache=TRUE} 
 ```
