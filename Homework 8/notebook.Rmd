@@ -18,7 +18,7 @@ Madrid as recorded in Open Street Maps. Your tasks are:
 three labels indicating the neighborhoods we must visit the next time we are in Madrid in case we want
  to have a handful of bars around. Save your final map as an image.
 
-```{r, cache=TRUE} 
+```{r, cache=TRUE}
 library(sf)
 library(sp)
 library(dplyr)
@@ -27,6 +27,87 @@ library(ggspatial)
 library(ggmap)
 library(raster)
 library(hexbin)
+```
+
+```{r, cache=TRUE, results='hide'}
+shapefile_folder <- "data1"
+
+neighborhoods <- st_read(file.path(shapefile_folder, "Barrios_madrid.shp"))
+madrid_municipality <- st_read(file.path(shapefile_folder, "Madrid_ETRS89.shp"))
+bars <- st_read(file.path(shapefile_folder, "bars_madrid_municipality.shp"))
+```
+
+```{r, cache=TRUE}
+ggplot() +
+  geom_sf(data = madrid_municipality, fill = "white", color = "black") +
+  geom_sf(data = neighborhoods, fill = "transparent", color = "black") +
+  geom_sf(data = bars, color = "red") +
+  theme_minimal()
+```
+
+```{r, cache=TRUE}
+if (st_crs(neighborhoods) != st_crs(4326)) {
+  neighborhoods <- st_transform(neighborhoods, 4326)
+}
+
+if (st_crs(madrid_municipality) != st_crs(4326)) {
+  madrid_municipality <- st_transform(madrid_municipality, 4326)
+}
+
+if (st_crs(bars) != st_crs(4326)) {
+  bars <- st_transform(bars, 4326)
+}
+
+bbox <- st_bbox(bars)
+expanded_bbox <- bbox + c(-0.05, -0.05, 0.05, 0.05) # Ajusta estos valores según lo necesario
+
+# Crear una cuadrícula hexagonal usando la caja delimitadora ampliada
+hex_grid <- st_make_grid(st_as_sfc(expanded_bbox), cellsize = c(0.005, 0.005), what = "polygons", square = FALSE)
+hex_grid_sf <- st_sf(hex_grid) %>%
+  mutate(grid_id = 1:length(lengths(hex_grid)))
+
+# Intersecar con el municipio de Madrid
+madrid_hexa <- st_intersection(madrid_municipality, hex_grid_sf)
+
+# Contar los puntos en cada hexágono
+madrid_hexa$pt_count <- lengths(st_intersects(madrid_hexa, bars))
+madrid_hexa$pt_count <- ifelse(madrid_hexa$pt_count == 0, NA, madrid_hexa$pt_count)
+```
+
+```{r, cache=TRUE} 
+# Definir los colores para el mapa
+myColors <- c("#BFBFBF", rev(brewer.pal(7, "Spectral")))
+
+# Crear el mapa hexagonal
+MAP4 <- ggplot(madrid_hexa, aes(fill = pt_count)) + 
+  geom_sf(colour = "black", linewidth = .025) +
+  scale_fill_distiller(palette = "Spectral", name = "Número de bares", na.value = "#EBEBEB") +
+  labs(
+    x = "\nLongitud",
+    y = "Latitud\n",
+    title = "Mapa Hexagonal de Bares en Madrid",
+    subtitle = "Datos de OpenStreetMap",
+    caption = "Elaboración: Tu Nombre\nDatos: OpenStreetMap"
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(lineheight = 1, size = 10, face = "bold"),
+    plot.subtitle = element_text(vjust = 0.5, size = 8, colour = "black"),
+    plot.caption = element_text(vjust = 0.5, size = 6, colour = "black"),
+    legend.title = element_text(angle = 0, vjust = 0.5, size = 8, colour = "black", face = "bold"),
+    legend.text = element_text(vjust = 0.5, size = 8, colour = "black"),
+    axis.line = element_blank(),
+    axis.text.x = element_blank(), axis.title.x = element_blank(),
+    axis.text.y = element_blank(), axis.title.y = element_blank(),
+    axis.ticks = element_blank(),
+    panel.background = element_blank()
+  )
+
+# Guardar el mapa final como imagen
+ggsave("hexabin_map_bars_madrid.png", plot = MAP4, width = 10, height = 8)
+
+# Mostrar el mapa
+print(MAP4)
 ```
 
 ## CONSOLIDATION EXERCISE 2: MARE NOSTRU MARE MORTUM
