@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Metadata generated with CatMDEdit version 5.0-->
+<gmd:MD_Metadata xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:xlink="http://www.w3.org/1999/xlink/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<gmd:fileIdentifier>
+		<gco:CharacterString>422fa235-762b-11e9-861d-ecb1d753f6e8</gco:CharacterString>
+	</gmd:fileIdentifier>
+	<gmd:language>
+		<gmd:LanguageCode codeList="./resources/codeList.xml#LanguageCode" codeListValue="spa">spa</gmd:LanguageCode>
+	</gmd:language>
+	<gmd:characterSet>
+		<gmd:MD_CharacterSetCode codeList="./resources/codeList.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
+	</gmd:characterSet>
+	<gmd:parentIdentifier gco:nilReason="missing"/>
+	<gmd:hierarchyLevel>
+		<gmd:MD_ScopeCode codeList="./resources/codeList.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+	</gmd:hierarchyLevel>
+	<gmd:hierarchyLevelName gco:nilReason="missing"/>
+	<gmd:contact>
+		<gmd:CI_ResponsibleParty>
+			<gmd:individualName gco:nilReason="missing"/>
+			<gmd:organisationName>
+				<gco:CharacterString>Ayuntamiento de Madrid. Área de Gobierno de Desarrollo Urbano. Departamento de Cartografía</gco:CharacterString>
+			</gmd:organisationName>
+			<gmd:positionName gco:nilReason="missing"/>
+			<gmd:contactInfo>
+				<gmd:CI_Contact>
+					<gmd:address>
+						<gmd:CI_Address>
+							<gmd:electronicMailAddress>
+								<gco:CharacterString>dptocartografia@madrid.es</gco:CharacterString>
+							</gmd:electronicMailAddress>
+						</gmd:CI_Address>
+					</gmd:address>
+				</gmd:CI_Contact>
+			</gmd:contactInfo>
+			<gmd:role>
+				<gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode" codeListValue="pointOfContact">pointOfContact</gmd:CI_RoleCode>
+			</gmd:role>
+		</gmd:CI_ResponsibleParty>
+	</gmd:contact>
+	<gmd:dateStamp>
+		<gco:Date>2019-01-31</gco:Date>
+	</gmd:dateStamp>
+	<gmd:metadataStandardName>
+		<gco:CharacterString>ISO 19115</gco:CharacterString>
+	</gmd:metadataStandardName>
+	<gmd:metadataStandardVersion>
+		<gco:CharacterString>ISO19115:2003/Cor 1 2006</gco:CharacterString>
+	</gmd:metadataStandardVersion>
+	<gmd:referenceSystemInfo>
+		<gmd:MD_ReferenceSystem>
+			<gmd:referenceSystemIdentifier>
+				<gmd:RS_Identifier>
+					<gmd:authority>
+						<gmd:CI_Citation>
+							<gmd:title>
+								<gco:CharacterString>European Petroleum Survey Group (EPSG)</gco:CharacterString>
+							</gmd:title>
+							<gmd:alternateTitle>
+								<gco:CharacterString>ETRS89 UTM30N</gco:CharacterString>
+							</gmd:alternateTitle>
+							<gmd:date>
+								<gmd:CI_Date>
+									<gmd:date>
+										<gco:Date>1986-01-01</gco:Date>
+									</gmd:date>
+									<gmd:dateType>
+										<gmd:CI_DateTypeCode codeList="./resources/codeList.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode>
+									</gmd:dateType>
+								</gmd:CI_Date>
+							</gmd:date>
+						</gmd:CI_Citation>
+					</gmd:authority>
+					<gmd:code>
+						<gco:CharacterString>EPSG:25830</gco:CharacterString>
+					</gmd:code>
+				</gmd:RS_Identifier>
+			</gmd:referenceSystemIdentifier>
+		</gmd:MD_ReferenceSystem>
+	</gmd:referenceSystemInfo>
+	<gmd:identificationInfo>
+		<gmd:MD_DataIdentification>
+			<gmd:citation>
+				<gmd:CI_Citation>
+					<gmd:title>
+						<gco:CharacterString>Barrios municipales de Madrid</gco:CharacterString>
+					</gmd:title>
+					<gmd:date>
+						<gmd:CI_Date>
+							<gmd:date>
+								<gco:Date>2017-10-31</gco:Date>
+							</gmd:date>
+							<gmd:dateType>
+								<gmd:CI_DateTypeCode codeList="./resources/codeList.xml#CI_DateTypeCode" codeListValue="revision">revision</gmd:CI_DateTypeCode>
+							</gmd:dateType>
+						</gmd:CI_Date>
+					</gmd:date>
+					<gmd:identifier>
+						<gmd:RS_Identifier>
+							<gmd:code>
+								<gco:CharacterString>http://geoportal.madrid.es/metadata/422fa235-762b-11e9-861d-ecb1d753f6e8</gco:CharacterString>
+							</gmd:code>
+						</gmd:RS_Identifier>
+					</gmd:identifier>
+				</gmd:CI_Citation>
+			</gmd:citation>
+			<gmd:abstract>
+				<gco:CharacterString>Delimitación de los 131  barrios del municipio de Madrid. Se indican los nombres y códigos de cada barrio y de los distritos a los que pertencen. La delimitación inicial corresponde a reestructuración territorial de 1987.  En esta versión  se incorporan  los cambios en la definición de los barrios del distrito de Vicálvaro que implica la creación de dos nuevos barrios y la modificación de los existentes, se añade también el cambio de denominación del barrio 17.1 San Ándres a Villaverde Alto, Casco Histórico de Villaverde, según el Pleno del Ayuntamiento de fecha 31-10-2017  BOAM nº 8034. Versión de los datos v3.4.1.</gco:CharacterString>
+			</gmd:abstract>
+			<gmd:pointOfContact>
+				<gmd:CI_ResponsibleParty>
+					<gmd:individualName gco:nilReason="missing"/>
+					<gmd:organisationName>
+						<gco:CharacterString>Ayuntamiento de Madrid. Área de Gobierno de Desarrollo Urbano. Departamento de Cartografía</gco:CharacterString>
+					</gmd:organisationName>
+					<gmd:positionName gco:nilReason="missing"/>
+					<gmd:contactInfo>
+						<gmd:CI_Contact>
+							<gmd:address>
+								<gmd:CI_Address>
+									<gmd:electronicMailAddress>
+										<gco:CharacterString>dptocartografia@madrid.es</gco:CharacterString>
+									</gmd:electronicMailAddress>
+								</gmd:CI_Address>
+							</gmd:address>
+						</gmd:CI_Contact>
+					</gmd:contactInfo>
+					<gmd:role>
+						<gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode" codeListValue="Punto de contacto">Punto de contacto</gmd:CI_RoleCode>
+					</gmd:role>
+				</gmd:CI_ResponsibleParty>
+			</gmd:pointOfContact>
+			<gmd:descriptiveKeywords>
+				<gmd:MD_Keywords>
+					<gmd:keyword>
+						<gco:CharacterString>barrios</gco:CharacterString>
+					</gmd:keyword>
+				</gmd:MD_Keywords>
+			</gmd:descriptiveKeywords>
+			<gmd:descriptiveKeywords>
+				<gmd:MD_Keywords>
+					<gmd:keyword>
+						<gco:CharacterString>límite</gco:CharacterString>
+					</gmd:keyword>
+				</gmd:MD_Keywords>
+			</gmd:descriptiveKeywords>
+			<gmd:descriptiveKeywords>
+				<gmd:MD_Keywords>
+					<gmd:keyword>
+						<gco:CharacterString>administrativo</gco:CharacterString>
+					</gmd:keyword>
+				</gmd:MD_Keywords>
+			</gmd:descriptiveKeywords>
+			<gmd:descriptiveKeywords>
+				<gmd:MD_Keywords>
+					<gmd:keyword>
+						<gco:CharacterString>http://datos.gob.es/kos/sector-publico/sector/urbanismo-infraestructuras</gco:CharacterString>
+					</gmd:keyword>
+				</gmd:MD_Keywords>
+			</gmd:descriptiveKeywords>
+			<gmd:descriptiveKeywords>
+				<gmd:MD_Keywords>
+					<gmd:keyword>
+						<gco:CharacterString>http://geoportal.madrid.es/categoria/limites_administrativos</gco:CharacterString>
+					</gmd:keyword>
+				</gmd:MD_Keywords>
+			</gmd:descriptiveKeywords>
+			<gmd:resourceConstraints>
+				<gmd:MD_Constraints>
+					<gmd:useLimitation>
+						<gco:CharacterString>https://datos.madrid.es/egob/catalogo/aviso-legal</gco:CharacterString>
+					</gmd:useLimitation>
+				</gmd:MD_Constraints>
+			</gmd:resourceConstraints>
+			<gmd:spatialResolution>
+				<gmd:MD_Resolution>
+					<gmd:equivalentScale>
+						<gmd:MD_RepresentativeFraction>
+							<gmd:denominator>
+								<gco:Integer>1000</gco:Integer>
+							</gmd:denominator>
+						</gmd:MD_RepresentativeFraction>
+					</gmd:equivalentScale>
+				</gmd:MD_Resolution>
+			</gmd:spatialResolution>
+			<gmd:language>
+				<gmd:LanguageCode codeList="./resources/codeList.xml#LanguageCode" codeListValue="spa">spa</gmd:LanguageCode>
+			</gmd:language>
+			<gmd:characterSet>
+				<gmd:MD_CharacterSetCode codeList="./resources/codeList.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
+			</gmd:characterSet>
+			<gmd:topicCategory>
+				<gmd:MD_TopicCategoryCode>imageryBaseMapsEarthCover</gmd:MD_TopicCategoryCode>
+			</gmd:topicCategory>
+			<gmd:extent>
+				<gmd:EX_Extent>
+					<gmd:description gco:nilReason="missing"/>
+					<gmd:geographicElement>
+						<gmd:EX_GeographicBoundingBox>
+							<gmd:westBoundLongitude>
+								<gco:Decimal>-3.888585</gco:Decimal>
+							</gmd:westBoundLongitude>
+							<gmd:eastBoundLongitude>
+								<gco:Decimal>-3.516245</gco:Decimal>
+							</gmd:eastBoundLongitude>
+							<gmd:southBoundLatitude>
+								<gco:Decimal>40.311410</gco:Decimal>
+							</gmd:southBoundLatitude>
+							<gmd:northBoundLatitude>
+								<gco:Decimal>40.645133 </gco:Decimal>
+							</gmd:northBoundLatitude>
+						</gmd:EX_GeographicBoundingBox>
+					</gmd:geographicElement>
+					<gmd:temporalElement gco:nilReason="missing"/>
+					<gmd:verticalElement gco:nilReason="missing"/>
+				</gmd:EX_Extent>
+			</gmd:extent>
+		</gmd:MD_DataIdentification>
+	</gmd:identificationInfo>
+	<gmd:distributionInfo>
+		<gmd:MD_Distribution>
+			<gmd:distributionFormat>
+				<gmd:MD_Format>
+					<gmd:name>
+						<gco:CharacterString>SHP</gco:CharacterString>
+					</gmd:name>
+					<gmd:version>
+						<gco:CharacterString>-</gco:CharacterString>
+					</gmd:version>
+				</gmd:MD_Format>
+			</gmd:distributionFormat>
+			<gmd:distributionFormat>
+				<gmd:MD_Format>
+					<gmd:name>
+						<gco:CharacterString>KML</gco:CharacterString>
+					</gmd:name>
+					<gmd:version>
+						<gco:CharacterString>-</gco:CharacterString>
+					</gmd:version>
+				</gmd:MD_Format>
+			</gmd:distributionFormat>
+			<gmd:transferOptions>
+				<gmd:MD_DigitalTransferOptions>
+					<gmd:onLine>
+						<gmd:CI_OnlineResource>
+							<gmd:linkage>
+								<gmd:URL>http://geoportal.madrid.es/fsdescargas/IDEAM_WBGEOPORTAL/LIMITES_ADMINISTRATIVOS/Barrios/Barrios.zip</gmd:URL>
+							</gmd:linkage>
+							<gmd:protocol>
+								<gco:CharacterString>WWW:DOWNLOAD-1.0-http--download</gco:CharacterString>
+							</gmd:protocol>
+							<gmd:name>
+								<gco:CharacterString>Barrios</gco:CharacterString>
+							</gmd:name>
+							<gmd:description>
+								<gco:CharacterString>Polígonos. Formato shp.</gco:CharacterString>
+							</gmd:description>
+							<gmd:function>
+								<gmd:CI_OnLineFunctionCode codeList="./resources/codeList.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+							</gmd:function>
+						</gmd:CI_OnlineResource>
+					</gmd:onLine>
+					<gmd:onLine>
+						<gmd:CI_OnlineResource>
+							<gmd:linkage>
+								<gmd:URL>https://geoportal.madrid.es/fsdescargas/IDEAM_WBGEOPORTAL/LIMITES_ADMINISTRATIVOS/Barrios/Barrios.kml</gmd:URL>
+							</gmd:linkage>
+							<gmd:protocol>
+								<gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
+							</gmd:protocol>
+							<gmd:name>
+								<gco:CharacterString>Barrios</gco:CharacterString>
+							</gmd:name>
+							<gmd:description>
+								<gco:CharacterString>Delimitaciones. Formato Kml.</gco:CharacterString>
+							</gmd:description>
+						</gmd:CI_OnlineResource>
+					</gmd:onLine>
+					<gmd:onLine>
+						<gmd:CI_OnlineResource>
+							<gmd:linkage>
+								<gmd:URL>https://geoportal.madrid.es/fsdescargas/IDEAM_WBGEOPORTAL/LIMITES_ADMINISTRATIVOS/Barrios/Historicos/Divisiones_Historicas.zip</gmd:URL>
+							</gmd:linkage>
+							<gmd:protocol>
+								<gco:CharacterString>WWW:DOWNLOAD-1.0-http--download</gco:CharacterString>
+							</gmd:protocol>
+							<gmd:name>
+								<gco:CharacterString>Divisiones administrativas históricas.</gco:CharacterString>
+							</gmd:name>
+							<gmd:description>
+								<gco:CharacterString>Polígonos. Formato shp.</gco:CharacterString>
+							</gmd:description>
+						</gmd:CI_OnlineResource>
+					</gmd:onLine>
+				</gmd:MD_DigitalTransferOptions>
+			</gmd:transferOptions>
+		</gmd:MD_Distribution>
+	</gmd:distributionInfo>
+	<gmd:dataQualityInfo>
+		<gmd:DQ_DataQuality>
+			<gmd:scope>
+				<gmd:DQ_Scope>
+					<gmd:level>
+						<gmd:MD_ScopeCode codeList="./resources/codeList.xml#MD_ScopeCode" codeListValue="Series">Series</gmd:MD_ScopeCode>
+					</gmd:level>
+					<gmd:levelDescription gco:nilReason="missing"/>
+				</gmd:DQ_Scope>
+			</gmd:scope>
+			<gmd:report gco:nilReason="missing"/>
+			<gmd:lineage>
+				<gmd:LI_Lineage>
+					<gmd:statement>
+						<gco:CharacterString>Se actualiza de la versión anterior de límites de barrio</gco:CharacterString>
+					</gmd:statement>
+					<gmd:processStep gco:nilReason="missing"/>
+					<gmd:source gco:nilReason="missing"/>
+				</gmd:LI_Lineage>
+			</gmd:lineage>
+		</gmd:DQ_DataQuality>
+	</gmd:dataQualityInfo>
+	<gmd:metadataMaintenance>
+		<gmd:MD_MaintenanceInformation>
+			<gmd:maintenanceAndUpdateFrequency>
+				<gmd:MD_MaintenanceFrequencyCode codeList="./resources/codeList.xml#MD_MaintenanceFrequencyCode" codeListValue="continual">continual</gmd:MD_MaintenanceFrequencyCode>
+			</gmd:maintenanceAndUpdateFrequency>
+		</gmd:MD_MaintenanceInformation>
+	</gmd:metadataMaintenance>
+	<Esri><CreaDate>20210601</CreaDate><CreaTime>12542900</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce></Esri></gmd:MD_Metadata>
