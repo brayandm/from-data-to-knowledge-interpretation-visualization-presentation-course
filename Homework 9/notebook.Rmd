@@ -36,7 +36,7 @@ harbour_space <- locations %>% filter(name == "Harbour Space, Campus Barcelona")
 
 bbox_fixed <- c(left = 2.074996458120354, bottom = 41.35855565204186, right = 2.2340404052210623, top = 41.41567063398011)
 
-BCN_TILE <- get_stadiamap(bbox = bbox_fixed, zoom = 14, maptype = "stamen_toner_lite", crop = TRUE, messaging = FALSE)
+BCN_TILE <- get_stadiamap(bbox = bbox_fixed, zoom = 14, maptype = "stamen_toner", crop = TRUE, messaging = FALSE)
 BCN_TILE <- ggmap(BCN_TILE)
 ```
 
