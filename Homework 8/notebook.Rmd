@@ -80,7 +80,7 @@ myColors <- c("#BFBFBF", rev(brewer.pal(7, "Spectral")))
 
 MAP4 <- ggplot(madrid_hexa, aes(fill = pt_count)) + 
   geom_sf(colour = "black", linewidth = .025) +
-  scale_fill_distiller(palette = "Spectral", name = "Number of bars", na.value = "#EBEBEB") +
+  scale_fill_distiller(palette = "Spectral", name = "Number of bars", na.value = "transparent")
   labs(
     x = "\nLongitude",
     y = "Latitude\n",
