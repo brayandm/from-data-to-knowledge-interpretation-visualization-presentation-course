@@ -3,3 +3,14 @@ title: "Homework 9"
 author: "Brayan Duran Medina"
 output: html_document
 ---
+
+## CONSOLIDATION EXERCISE: geocoding information and getting routes.
+Please get the long/lat coordinates of the following places:
+
+Harbour Space, Campus Barcelona La Sagrada Familia El Camp Nou (FC Barcelona Stadium) Casa Batllo
+
+Your task is to compute de distance by car and foot from Harbour Space to each of the 3 location 
+and to visualize that information into a map.
+
+```{r, cache=TRUE}
+```
