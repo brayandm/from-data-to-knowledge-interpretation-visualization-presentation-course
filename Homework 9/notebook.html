@@ -445,7 +445,7 @@ map_list &lt;- lapply(1:length(routes), function(i) {
       labs(title = paste(&quot;Routes from Harbour Space to&quot;, place_name)) +
       theme_void() +
       theme(
-        plot.title = element_text(hjust = 0.5, size = 30, color = &quot;black&quot;),
+        plot.title = element_text(vjust = 3, hjust = 0.1, size = 30, color = &quot;black&quot;),
         plot.background = element_rect(fill = &quot;#bebebe&quot;, color = NA),
         legend.background = element_rect(fill = &quot;white&quot;, color = &quot;black&quot;, size = 4),
         legend.text = element_text(size = 15, color = &quot;black&quot;),
