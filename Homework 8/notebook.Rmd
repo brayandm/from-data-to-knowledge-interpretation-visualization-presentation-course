@@ -57,37 +57,35 @@ if (st_crs(madrid_municipality) != st_crs(4326)) {
 if (st_crs(bars) != st_crs(4326)) {
   bars <- st_transform(bars, 4326)
 }
+```
 
-bbox <- st_bbox(bars)
-expanded_bbox <- bbox + c(-0.05, -0.05, 0.05, 0.05) # Ajusta estos valores según lo necesario
-
-# Crear una cuadrícula hexagonal usando la caja delimitadora ampliada
-hex_grid <- st_make_grid(st_as_sfc(expanded_bbox), cellsize = c(0.005, 0.005), what = "polygons", square = FALSE)
+```{r, cache=TRUE}
+hex_grid <- st_make_grid(bars, cellsize = c(0.005, 0.005), what = "polygons", square = FALSE)
 hex_grid_sf <- st_sf(hex_grid) %>%
   mutate(grid_id = 1:length(lengths(hex_grid)))
 
-# Intersecar con el municipio de Madrid
+
+ggplot(hex_grid_sf) +
+  geom_sf() +
+  theme_minimal()
+
 madrid_hexa <- st_intersection(madrid_municipality, hex_grid_sf)
 
-# Contar los puntos en cada hexágono
 madrid_hexa$pt_count <- lengths(st_intersects(madrid_hexa, bars))
 madrid_hexa$pt_count <- ifelse(madrid_hexa$pt_count == 0, NA, madrid_hexa$pt_count)
 ```
 
 ```{r, cache=TRUE} 
-# Definir los colores para el mapa
 myColors <- c("#BFBFBF", rev(brewer.pal(7, "Spectral")))
 
-# Crear el mapa hexagonal
 MAP4 <- ggplot(madrid_hexa, aes(fill = pt_count)) + 
   geom_sf(colour = "black", linewidth = .025) +
-  scale_fill_distiller(palette = "Spectral", name = "Número de bares", na.value = "#EBEBEB") +
+  scale_fill_distiller(palette = "Spectral", name = "Number of bars", na.value = "#EBEBEB") +
   labs(
-    x = "\nLongitud",
-    y = "Latitud\n",
-    title = "Mapa Hexagonal de Bares en Madrid",
-    subtitle = "Datos de OpenStreetMap",
-    caption = "Elaboración: Tu Nombre\nDatos: OpenStreetMap"
+    x = "\nLongitude",
+    y = "Latitude\n",
+    title = "Hexabin Map of Bars in Madrid",
+    subtitle = "Number of bars in Madrid by neighborhood",
   ) +
   theme(
     legend.position = "right",
@@ -103,10 +101,8 @@ MAP4 <- ggplot(madrid_hexa, aes(fill = pt_count)) +
     panel.background = element_blank()
   )
 
-# Guardar el mapa final como imagen
 ggsave("hexabin_map_bars_madrid.png", plot = MAP4, width = 10, height = 8)
 
-# Mostrar el mapa
 print(MAP4)
 ```
 
