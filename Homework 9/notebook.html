@@ -440,8 +440,8 @@ map_list &lt;- lapply(1:length(routes), function(i) {
     place_name &lt;- locations$name[i]
     
     BCN_TILE +
-      geom_sf(data = car_sf, aes(color = &quot;Car&quot;), size = 8, inherit.aes = FALSE) +
-      geom_sf(data = foot_sf, aes(color = &quot;Foot&quot;), size = 8, inherit.aes = FALSE) +
+      geom_sf(data = car_sf, aes(color = &quot;Car&quot;), linewidth = 3, inherit.aes = FALSE) +
+      geom_sf(data = foot_sf, aes(color = &quot;Foot&quot;), linewidth = 3, inherit.aes = FALSE) +
       labs(title = paste(&quot;Routes from Harbour Space to&quot;, place_name)) +
       theme_void() +
       theme(
@@ -459,7 +459,7 @@ map_list &lt;- lapply(1:length(routes), function(i) {
         plot.margin = unit(c(1, 0, 0, 0), &quot;cm&quot;)
       ) +
       guides(colour = guide_legend(title = &quot;Route Type&quot;)) +
-      scale_color_manual(name = &quot;Route Type&quot;, values = c(&quot;Car&quot; = &quot;red&quot;, &quot;Foot&quot; = &quot;blue&quot;))
+      scale_color_manual(name = &quot;Route Type&quot;, values = c(&quot;Car&quot; = &quot;red&quot;, &quot;Foot&quot; = &quot;#11f3ff&quot;))
   }
 })</code></pre>
 <pre><code>## Coordinate system already present. Adding new coordinate system, which will

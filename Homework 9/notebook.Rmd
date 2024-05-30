@@ -64,8 +64,8 @@ map_list <- lapply(1:length(routes), function(i) {
     place_name <- locations$name[i]
     
     BCN_TILE +
-      geom_sf(data = car_sf, aes(color = "Car"), size = 8, inherit.aes = FALSE) +
-      geom_sf(data = foot_sf, aes(color = "Foot"), size = 8, inherit.aes = FALSE) +
+      geom_sf(data = car_sf, aes(color = "Car"), linewidth = 3, inherit.aes = FALSE) +
+      geom_sf(data = foot_sf, aes(color = "Foot"), linewidth = 3, inherit.aes = FALSE) +
       labs(title = paste("Routes from Harbour Space to", place_name)) +
       theme_void() +
       theme(
@@ -83,7 +83,7 @@ map_list <- lapply(1:length(routes), function(i) {
         plot.margin = unit(c(1, 0, 0, 0), "cm")
       ) +
       guides(colour = guide_legend(title = "Route Type")) +
-      scale_color_manual(name = "Route Type", values = c("Car" = "red", "Foot" = "blue"))
+      scale_color_manual(name = "Route Type", values = c("Car" = "red", "Foot" = "#11f3ff"))
   }
 })
 
