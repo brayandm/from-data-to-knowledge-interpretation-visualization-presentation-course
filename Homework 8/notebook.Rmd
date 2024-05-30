@@ -214,11 +214,25 @@ plot <- ggplot() +
   geom_sf(data = world, fill = "lightgray", color = "white") +
   geom_sf(data = data_sf, aes(size = deaths_category), color = "red", fill = "red", alpha = 0.2) +
   scale_size_manual(values = c("<=5" = 1, "[5-25]" = 3, "[25-50]" = 5, "[50-100]" = 7, "[100-250]" = 9, ">250" = 11), name = "Deaths") +
-  theme_minimal() +
+  theme_minimal(base_family = "Arial") +
   coord_sf(xlim = c(-10, 40), ylim = c(25, 50), expand = FALSE) +
   labs(title = "Mare Nostrum / Mare Mortum", 
-  subtitle = "Between 2014 and 2023, 10,000 people have died in the Mediterranean",
-  x = "Longitude", y = "Latitude")
+       subtitle = "Between 2014 and 2023, 10,000 people have died in the Mediterranean",
+       x = "Longitude", y = "Latitude") +
+  theme(
+    plot.background = element_rect(fill = "black", color = NA),
+    panel.background = element_rect(fill = "black", color = NA),
+    plot.title = element_text(color = "white", size = 14, hjust = 0.5),
+    plot.subtitle = element_text(color = "white", size = 10, hjust = 0.5),
+    axis.title = element_text(color = "white"),
+    axis.text = element_text(color = "white"),
+    legend.background = element_rect(fill = "black", color = NA),
+    legend.text = element_text(color = "white"),
+    legend.title = element_text(color = "white"),
+    panel.grid = element_line(color = "black"),
+    panel.border = element_blank()
+  )
+
 
 print(plot)
 
