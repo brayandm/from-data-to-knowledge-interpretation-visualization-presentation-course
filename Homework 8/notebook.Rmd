@@ -211,9 +211,12 @@ plot <- ggplot() +
   geom_sf(data = world, fill = "lightgray", color = "white") +
   geom_sf(data = data_sf, aes(size = deaths, color = deaths_category), alpha = 0.7) +
   scale_size(range = c(1, 10), name = "Number of Deaths") +
-  scale_color_manual(values = c("1-10" = "blue", "11-50" = "green", "51-100" = "yellow", "101-200" = "orange", ">200" = "red"), name = "Deaths Category") +
+  scale_color_manual(values = c("1-10" = "blue", "11-50" = "green", "51-100" = "yellow", "101-200" = "orange", ">200" = "red"), name = "Deaths") +
   theme_minimal() +
-  labs(title = "Missing Migrants in the Mediterranean", x = "Longitude", y = "Latitude")
+  coord_sf(xlim = c(-10, 40), ylim = c(25, 50), expand = FALSE) +
+  labs(title = "Mare Nostrum / Mare Mortum", 
+  subtitle = "Between 2014 and 2023, 10,000 people have died in the Mediterranean",
+  x = "Longitude", y = "Latitude")
 
 print(plot)
 
