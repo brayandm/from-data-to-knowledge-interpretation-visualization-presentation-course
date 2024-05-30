@@ -457,15 +457,9 @@ map_list &lt;- lapply(1:length(routes), function(i) {
 ## replace the existing one.</code></pre>
 <pre class="r"><code>map_list &lt;- map_list[!sapply(map_list, is.null)]
 
-combined_map &lt;- arrangeGrob(grobs = map_list, ncol = 1, nrow = 3)
+gtable_maps &lt;- do.call(rbind, lapply(map_list, function(x) ggplotGrob(x)))
 
-print(combined_map)</code></pre>
-<pre><code>## TableGrob (3 x 1) &quot;arrange&quot;: 3 grobs
-##   z     cells    name           grob
-## 1 1 (1-1,1-1) arrange gtable[layout]
-## 2 2 (2-2,1-1) arrange gtable[layout]
-## 3 3 (3-3,1-1) arrange gtable[layout]</code></pre>
-<pre class="r"><code>ggsave(&quot;routes_combined.png&quot;, plot = combined_map, scale = 1, height = 36, width = 12, dpi = 300)</code></pre>
+ggsave(&quot;routes_combined.png&quot;, plot = gtable_maps, scale = 1, height = 20, width = 12, dpi = 300, units = &quot;in&quot;, limitsize = FALSE)</code></pre>
 </div>
 
 

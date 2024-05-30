@@ -76,7 +76,7 @@ map_list <- lapply(1:length(routes), function(i) {
 
 map_list <- map_list[!sapply(map_list, is.null)]
 
-combined_map <- arrangeGrob(grobs = map_list, ncol = 1, nrow = 3)
+gtable_maps <- do.call(rbind, lapply(map_list, function(x) ggplotGrob(x)))
 
-ggsave("routes_combined.png", plot = combined_map, scale = 1, height = 36, width = 12, dpi = 300)
+ggsave("routes_combined.png", plot = gtable_maps, scale = 1, height = 24, width = 12, dpi = 300, units = "in", limitsize = FALSE)
 ```
