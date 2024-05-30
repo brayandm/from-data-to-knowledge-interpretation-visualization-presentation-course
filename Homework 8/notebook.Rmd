@@ -27,6 +27,8 @@ library(ggspatial)
 library(ggmap)
 library(raster)
 library(hexbin)
+library(grid)
+library(gridExtra)
 ```
 
 ```{r, cache=TRUE, results='hide'}
@@ -58,7 +60,11 @@ if (st_crs(bars) != st_crs(4326)) {
   bars <- st_transform(bars, 4326)
 }
 ```
+
 ```{r, cache=TRUE} 
+stadia_api_key <- "a27851bf-c50f-45d2-956d-5dad97b98625"
+register_stadiamaps(stadia_api_key)
+
 hex_grid <- st_make_grid(bars, cellsize = c(0.005, 0.005), what = "polygons", square = FALSE)
 hex_grid_sf <- st_sf(hex_grid) %>%
   mutate(grid_id = 1:length(lengths(hex_grid)))
@@ -70,7 +76,17 @@ myColors <- c("#BFBFBF", rev(brewer.pal(7, "Spectral")))
 
 hex_extent <- st_bbox(hex_grid_sf)
 
+bbox_values <- c(left = hex_extent["xmin"], bottom = hex_extent["ymin"], right = hex_extent["xmax"], top = hex_extent["ymax"])
+
+madrid_map <- get_stadiamap(bbox = c(left = -3.799859, bottom = 40.341650, right = -3.564859, top = 40.537949), zoom = 13, maptype = "stamen_toner_lite")
+
+ggmap(madrid_map)
+ggmap_bbox <- attr(madrid_map, 'bb')
+
 MAP4 <- ggplot() +
+  annotation_custom(rasterGrob(madrid_map, width=unit(1,"npc"), height=unit(1,"npc")), 
+                    xmin=ggmap_bbox$ll.lon, xmax=ggmap_bbox$ur.lon, 
+                    ymin=ggmap_bbox$ll.lat, ymax=ggmap_bbox$ur.lat) +
   geom_sf(data = hex_grid_sf, aes(fill = pt_count), colour = "black", linewidth = .025) +
   geom_sf(data = madrid_municipality, fill = NA, colour = "black", linewidth = 0.5) +
   scale_fill_distiller(palette = "Spectral", name = "Number of bars", na.value = "transparent") +
@@ -78,8 +94,9 @@ MAP4 <- ggplot() +
   labs(
     x = "\nLongitude",
     y = "Latitude\n",
-    title = "Hexabin Map of Bars in Madrid",
-    subtitle = "Number of bars in Madrid by neighborhood"
+    title = "Hexabin Map of Bars in Madrid 2023",
+    subtitle = "Number of bars in Madrid by neighborhood",
+    source = "Source: Open Street Maps"
   ) +
   theme(
     legend.position = "right",
