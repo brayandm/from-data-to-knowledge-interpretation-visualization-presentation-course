@@ -18,7 +18,7 @@ Madrid as recorded in Open Street Maps. Your tasks are:
 three labels indicating the neighborhoods we must visit the next time we are in Madrid in case we want
  to have a handful of bars around. Save your final map as an image.
 
-```{r}
+```{r, cache=TRUE}
 library(sf)
 library(sp)
 library(dplyr)
@@ -66,7 +66,7 @@ if (st_crs(bars) != st_crs(4326)) {
 stadia_api_key <- "a27851bf-c50f-45d2-956d-5dad97b98625"
 register_stadiamaps(stadia_api_key)
 
-hex_grid <- st_make_grid(bars, cellsize = c(0.005, 0.005), what = "polygons", square = FALSE)
+hex_grid <- st_make_grid(bars, cellsize = c(0.0025, 0.0025), what = "polygons", square = FALSE)
 hex_grid_sf <- st_sf(hex_grid) %>%
   mutate(grid_id = 1:length(lengths(hex_grid)))
 
@@ -96,8 +96,11 @@ MAP4 <- ggplot() +
                     ymin=ggmap_bbox$ll.lat, ymax=ggmap_bbox$ur.lat) +
   geom_sf(data = hex_grid_sf, aes(fill = pt_count), colour = "black", linewidth = .025) +
   geom_sf(data = madrid_municipality, fill = NA, colour = "black", linewidth = 0.5) +
-  geom_text(data = as.data.frame(labels), aes(x = st_coordinates(labels)[,1], y = st_coordinates(labels)[,2], label = NOMBRE), 
-            size = 3, color = "black", fill = "white", label.size = NA, inherit.aes = FALSE) +
+  geom_label(data = as.data.frame(labels), 
+             aes(x = st_coordinates(labels)[,1], y = st_coordinates(labels)[,2], label = NOMBRE), 
+             size = 2, color = "black", fill = "white", fontface = "bold", label.padding = unit(0.25, "lines"), 
+             label.size = 0.5, label.r = unit(0.15, "lines"), 
+             nudge_x = 0.03) +
   scale_fill_distiller(palette = "Spectral", name = "Number of bars", na.value = "transparent") +
   coord_sf(xlim = c(hex_extent["xmin"], hex_extent["xmax"]), ylim = c(hex_extent["ymin"], hex_extent["ymax"]), expand = FALSE) +
   labs(
