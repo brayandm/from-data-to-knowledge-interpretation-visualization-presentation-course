@@ -61,7 +61,7 @@ map_list <- lapply(1:length(routes), function(i) {
   if (!is.null(routes[[i]])) {
     car_sf <- st_as_sf(routes[[i]]$car)
     foot_sf <- st_as_sf(routes[[i]]$foot)
-    place_name <- locations$name[i + 1]
+    place_name <- locations$name[i]
     
     BCN_TILE +
       geom_sf(data = car_sf, colour = "red", size = 1, inherit.aes = FALSE) +
