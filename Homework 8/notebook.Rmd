@@ -198,6 +198,8 @@ data_filtered <- data_filtered %>%
     deaths > 200 ~ ">200"
   ))
 
+data_filtered$deaths_category <- factor(data_filtered$deaths_category, levels = c("1-10", "11-50", "51-100", "101-200", ">200"))
+
 data_sf <- st_as_sf(data_filtered, coords = c("lon", "lat"), crs = 4326)
 
 res <- "03"
