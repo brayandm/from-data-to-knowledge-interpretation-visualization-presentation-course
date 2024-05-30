@@ -165,7 +165,59 @@ world <- gisco_get_countries(
 
 10 - Plot a bubble map as the one below. It’s not mandatory to replicate the aesthetics of the map below.
 
-```{r, cache=TRUE} 
+```{r, cache=TRUE}
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(sf)
+library(giscoR)
+library(ggplot2)
+
+data <- read_excel("data2/Missing_Migrants.xlsx")
+
+data_filtered <- data %>% filter(Region_Incident == "Mediterranean")
+
+data_filtered <- data_filtered %>% drop_na(Coordinates)
+
+data_filtered <- data_filtered %>%
+  mutate(lon = as.numeric(sub("^.*?,", "", Coordinates)),
+         lat = as.numeric(gsub(",.*$", "", Coordinates)))
+
+colnames(data_filtered)[8] <- "deaths"
+
+data_filtered <- data_filtered %>% drop_na(deaths)
+
+data_filtered <- data_filtered %>% filter(deaths > 0)
+
+data_filtered <- data_filtered %>%
+  mutate(deaths_category = case_when(
+    deaths <= 10 ~ "1-10",
+    deaths <= 50 ~ "11-50",
+    deaths <= 100 ~ "51-100",
+    deaths <= 200 ~ "101-200",
+    deaths > 200 ~ ">200"
+  ))
+
+data_sf <- st_as_sf(data_filtered, coords = c("lon", "lat"), crs = 4326)
+
+res <- "03"
+target_crs <- 4326
+world <- gisco_get_countries(
+  resolution = res, region = NULL,
+  epsg = target_crs
+)
+
+plot <- ggplot() +
+  geom_sf(data = world, fill = "lightgray", color = "white") +
+  geom_sf(data = data_sf, aes(size = deaths, color = deaths_category), alpha = 0.7) +
+  scale_size(range = c(1, 10), name = "Number of Deaths") +
+  scale_color_manual(values = c("1-10" = "blue", "11-50" = "green", "51-100" = "yellow", "101-200" = "orange", ">200" = "red"), name = "Deaths Category") +
+  theme_minimal() +
+  labs(title = "Missing Migrants in the Mediterranean", x = "Longitude", y = "Latitude")
+
+print(plot)
+
+ggsave("bubble_map_missing_migrants.png", plot = plot, width = 10, height = 8)
 ```
 
 ## CONSOLIDATION EXERCISE 3: CARTOGRAMS.
