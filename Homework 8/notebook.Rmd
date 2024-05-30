@@ -63,10 +63,10 @@ if (st_crs(bars) != st_crs(4326)) {
 ```
 
 ```{r, cache=TRUE} 
-stadia_api_key <- "a27851bf-c50f-45d2-956d-5dad97b98625"
+stadia_api_key <- "9929b39d-4ff6-49b3-a0d8-244eb95edbbb"
 register_stadiamaps(stadia_api_key)
 
-hex_grid <- st_make_grid(bars, cellsize = c(0.0025, 0.0025), what = "polygons", square = FALSE)
+hex_grid <- st_make_grid(bars, cellsize = c(0.003, 0.003), what = "polygons", square = FALSE)
 hex_grid_sf <- st_sf(hex_grid) %>%
   mutate(grid_id = 1:length(lengths(hex_grid)))
 
