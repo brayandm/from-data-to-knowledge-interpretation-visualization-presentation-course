@@ -64,13 +64,26 @@ map_list <- lapply(1:length(routes), function(i) {
     place_name <- locations$name[i]
     
     BCN_TILE +
-      geom_sf(data = car_sf, colour = "red", size = 1, inherit.aes = FALSE) +
-      geom_sf(data = foot_sf, colour = "blue", size = 1, inherit.aes = FALSE) +
+      geom_sf(data = car_sf, aes(color = "Car"), size = 8, inherit.aes = FALSE) +
+      geom_sf(data = foot_sf, aes(color = "Foot"), size = 8, inherit.aes = FALSE) +
       labs(title = paste("Routes from Harbour Space to", place_name)) +
       theme_void() +
-      theme(legend.position = "bottom") +
+      theme(
+        plot.title = element_text(hjust = 0.5, size = 30, color = "black"),
+        plot.background = element_rect(fill = "#bebebe", color = NA),
+        legend.background = element_rect(fill = "white", color = "black", size = 4),
+        legend.text = element_text(size = 15, color = "black"),
+        legend.title = element_text(size = 20, face = "bold", color = "black", vjust = 1),
+        legend.key.width = unit(1, "cm"),
+        legend.spacing.y = unit(0.2, "cm"),
+        legend.position = c(1, 0.1), 
+        legend.justification = c(1.1, 0),
+        legend.title.align = 0.5,
+        legend.margin = margin(1, 1, 1, 1, "cm"),
+        plot.margin = unit(c(1, 0, 0, 0), "cm")
+      ) +
       guides(colour = guide_legend(title = "Route Type")) +
-      scale_color_manual(values = c("red" = "Car", "blue" = "Foot"))
+      scale_color_manual(name = "Route Type", values = c("Car" = "red", "Foot" = "blue"))
   }
 })
 
@@ -78,5 +91,5 @@ map_list <- map_list[!sapply(map_list, is.null)]
 
 gtable_maps <- do.call(rbind, lapply(map_list, function(x) ggplotGrob(x)))
 
-ggsave("routes_combined.png", plot = gtable_maps, scale = 1, height = 24, width = 12, dpi = 300, units = "in", limitsize = FALSE)
+ggsave("routes_combined.png", plot = gtable_maps, scale = 1, height = 23, width = 14, units = "in", limitsize = FALSE)
 ```

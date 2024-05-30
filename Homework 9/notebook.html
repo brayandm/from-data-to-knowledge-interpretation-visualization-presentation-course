@@ -440,18 +440,36 @@ map_list &lt;- lapply(1:length(routes), function(i) {
     place_name &lt;- locations$name[i]
     
     BCN_TILE +
-      geom_sf(data = car_sf, colour = &quot;red&quot;, size = 1, inherit.aes = FALSE) +
-      geom_sf(data = foot_sf, colour = &quot;blue&quot;, size = 1, inherit.aes = FALSE) +
+      geom_sf(data = car_sf, aes(color = &quot;Car&quot;), size = 8, inherit.aes = FALSE) +
+      geom_sf(data = foot_sf, aes(color = &quot;Foot&quot;), size = 8, inherit.aes = FALSE) +
       labs(title = paste(&quot;Routes from Harbour Space to&quot;, place_name)) +
       theme_void() +
-      theme(legend.position = &quot;bottom&quot;) +
+      theme(
+        plot.title = element_text(hjust = 0.5, size = 30, color = &quot;black&quot;),
+        plot.background = element_rect(fill = &quot;#bebebe&quot;, color = NA),
+        legend.background = element_rect(fill = &quot;white&quot;, color = &quot;black&quot;, size = 4),
+        legend.text = element_text(size = 15, color = &quot;black&quot;),
+        legend.title = element_text(size = 20, face = &quot;bold&quot;, color = &quot;black&quot;, vjust = 1),
+        legend.key.width = unit(1, &quot;cm&quot;),
+        legend.spacing.y = unit(0.2, &quot;cm&quot;),
+        legend.position = c(1, 0.1), 
+        legend.justification = c(1.1, 0),
+        legend.title.align = 0.5,
+        legend.margin = margin(1, 1, 1, 1, &quot;cm&quot;),
+        plot.margin = unit(c(1, 0, 0, 0), &quot;cm&quot;)
+      ) +
       guides(colour = guide_legend(title = &quot;Route Type&quot;)) +
-      scale_color_manual(values = c(&quot;red&quot; = &quot;Car&quot;, &quot;blue&quot; = &quot;Foot&quot;))
+      scale_color_manual(name = &quot;Route Type&quot;, values = c(&quot;Car&quot; = &quot;red&quot;, &quot;Foot&quot; = &quot;blue&quot;))
   }
 })</code></pre>
 <pre><code>## Coordinate system already present. Adding new coordinate system, which will
-## replace the existing one.
-## Coordinate system already present. Adding new coordinate system, which will
+## replace the existing one.</code></pre>
+<pre><code>## Warning: The `size` argument of `element_rect()` is deprecated as of ggplot2 3.4.0.
+## ℹ Please use the `linewidth` argument instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<pre><code>## Coordinate system already present. Adding new coordinate system, which will
 ## replace the existing one.
 ## Coordinate system already present. Adding new coordinate system, which will
 ## replace the existing one.</code></pre>
@@ -459,7 +477,7 @@ map_list &lt;- lapply(1:length(routes), function(i) {
 
 gtable_maps &lt;- do.call(rbind, lapply(map_list, function(x) ggplotGrob(x)))
 
-ggsave(&quot;routes_combined.png&quot;, plot = gtable_maps, scale = 1, height = 20, width = 12, dpi = 300, units = &quot;in&quot;, limitsize = FALSE)</code></pre>
+ggsave(&quot;routes_combined.png&quot;, plot = gtable_maps, scale = 1, height = 23, width = 14, units = &quot;in&quot;, limitsize = FALSE)</code></pre>
 </div>
 
 
