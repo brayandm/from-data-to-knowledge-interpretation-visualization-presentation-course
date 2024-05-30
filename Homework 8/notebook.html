@@ -413,8 +413,9 @@ ggplot(hex_grid_sf) +
 <pre><code>## Warning: attribute variables are assumed to be spatially constant throughout
 ## all geometries</code></pre>
 <pre class="r"><code>madrid_hexa$pt_count &lt;- lengths(st_intersects(madrid_hexa, bars))
-madrid_hexa$pt_count &lt;- ifelse(madrid_hexa$pt_count == 0, NA, madrid_hexa$pt_count)</code></pre>
-<pre class="r"><code>myColors &lt;- c(&quot;#BFBFBF&quot;, rev(brewer.pal(7, &quot;Spectral&quot;)))
+madrid_hexa$pt_count &lt;- ifelse(madrid_hexa$pt_count == 0, NA, madrid_hexa$pt_count)
+
+myColors &lt;- c(&quot;#BFBFBF&quot;, rev(brewer.pal(7, &quot;Spectral&quot;)))
 
 MAP4 &lt;- ggplot(madrid_hexa, aes(fill = pt_count)) + 
   geom_sf(colour = &quot;black&quot;, linewidth = .025) +
