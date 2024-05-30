@@ -63,25 +63,23 @@ hex_grid <- st_make_grid(bars, cellsize = c(0.005, 0.005), what = "polygons", sq
 hex_grid_sf <- st_sf(hex_grid) %>%
   mutate(grid_id = 1:length(lengths(hex_grid)))
 
-ggplot(hex_grid_sf) +
-  geom_sf() +
-  theme_minimal()
-
-madrid_hexa <- st_intersection(madrid_municipality, hex_grid_sf)
-
-madrid_hexa$pt_count <- lengths(st_intersects(madrid_hexa, bars))
-madrid_hexa$pt_count <- ifelse(madrid_hexa$pt_count == 0, NA, madrid_hexa$pt_count)
+hex_grid_sf$pt_count <- lengths(st_intersects(hex_grid_sf, bars))
+hex_grid_sf$pt_count <- ifelse(hex_grid_sf$pt_count == 0, NA, hex_grid_sf$pt_count)
 
 myColors <- c("#BFBFBF", rev(brewer.pal(7, "Spectral")))
 
-MAP4 <- ggplot(madrid_hexa, aes(fill = pt_count)) + 
-  geom_sf(colour = "black", linewidth = .025) +
-  scale_fill_distiller(palette = "Spectral", name = "Number of bars", na.value = "transparent")
+hex_extent <- st_bbox(hex_grid_sf)
+
+MAP4 <- ggplot() +
+  geom_sf(data = hex_grid_sf, aes(fill = pt_count), colour = "black", linewidth = .025) +
+  geom_sf(data = madrid_municipality, fill = NA, colour = "black", linewidth = 0.5) +
+  scale_fill_distiller(palette = "Spectral", name = "Number of bars", na.value = "transparent") +
+  coord_sf(xlim = c(hex_extent["xmin"], hex_extent["xmax"]), ylim = c(hex_extent["ymin"], hex_extent["ymax"]), expand = FALSE) +
   labs(
     x = "\nLongitude",
     y = "Latitude\n",
     title = "Hexabin Map of Bars in Madrid",
-    subtitle = "Number of bars in Madrid by neighborhood",
+    subtitle = "Number of bars in Madrid by neighborhood"
   ) +
   theme(
     legend.position = "right",
