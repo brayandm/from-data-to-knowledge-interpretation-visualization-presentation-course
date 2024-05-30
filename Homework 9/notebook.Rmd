@@ -12,5 +12,73 @@ Harbour Space, Campus Barcelona La Sagrada Familia El Camp Nou (FC Barcelona Sta
 Your task is to compute de distance by car and foot from Harbour Space to each of the 3 location 
 and to visualize that information into a map.
 
+```{r}
+library(tidyverse)
+library(sf)
+library(ggmap)
+library(osmdata)
+library(tidygeocoder)
+library(osrm)
+library(gridExtra)
+```
+
 ```{r, cache=TRUE}
+stadia_api_key <- "60fc6640-0800-4609-a115-d08320f7665f"
+register_stadiamaps(stadia_api_key)
+
+locations <- tibble(
+  name = c("Harbour Space, Campus Barcelona", "La Sagrada Familia", "El Camp Nou", "Casa Batllo"),
+  lat = c(41.39058154071101, 41.403625339102646, 41.38089518399371, 41.39169869775547),
+  long = c(2.196738000726682, 2.174350603195429, 2.1228167602398784, 2.1649159045942996)
+)
+
+harbour_space <- locations %>% filter(name == "Harbour Space, Campus Barcelona")
+
+bbox_fixed <- c(left = 2.074996458120354, bottom = 41.35855565204186, right = 2.2340404052210623, top = 41.41567063398011)
+
+BCN_TILE <- get_stadiamap(bbox = bbox_fixed, zoom = 14, maptype = "stamen_toner_lite", crop = TRUE, messaging = FALSE)
+BCN_TILE <- ggmap(BCN_TILE)
+```
+
+```{r}
+compute_routes <- function(src_coords, dst_coords) {
+  list(
+    car = osrmRoute(src = src_coords, dst = dst_coords, osrm.profile = "car"),
+    foot = osrmRoute(src = src_coords, dst = dst_coords, osrm.profile = "foot")
+  )
+}
+
+routes <- lapply(1:nrow(locations), function(i) {
+  if (locations$name[i] != "Harbour Space, Campus Barcelona") {
+    compute_routes(
+      src_coords = c(harbour_space$long, harbour_space$lat),
+      dst_coords = c(locations$long[i], locations$lat[i])
+    )
+  }
+})
+
+map_list <- lapply(1:length(routes), function(i) {
+  if (!is.null(routes[[i]])) {
+    car_sf <- st_as_sf(routes[[i]]$car)
+    foot_sf <- st_as_sf(routes[[i]]$foot)
+    place_name <- locations$name[i + 1]
+    
+    BCN_TILE +
+      geom_sf(data = car_sf, colour = "red", size = 1, inherit.aes = FALSE) +
+      geom_sf(data = foot_sf, colour = "blue", size = 1, inherit.aes = FALSE) +
+      labs(title = paste("Routes from Harbour Space to", place_name)) +
+      theme_void() +
+      theme(legend.position = "bottom") +
+      guides(colour = guide_legend(title = "Route Type")) +
+      scale_color_manual(values = c("red" = "Car", "blue" = "Foot"))
+  }
+})
+
+map_list <- map_list[!sapply(map_list, is.null)]
+
+combined_map <- marrangeGrob(map_list, ncol = 1, nrow = 3)
+
+print(combined_map)
+
+ggsave("routes_combined.png", plot = combined_map, scale = 1, height = 36, width = 12, dpi = 300)
 ```
