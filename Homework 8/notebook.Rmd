@@ -191,14 +191,15 @@ data_filtered <- data_filtered %>% filter(deaths > 0)
 
 data_filtered <- data_filtered %>%
   mutate(deaths_category = case_when(
-    deaths <= 10 ~ "1-10",
-    deaths <= 50 ~ "11-50",
-    deaths <= 100 ~ "51-100",
-    deaths <= 200 ~ "101-200",
-    deaths > 200 ~ ">200"
+    deaths <= 5 ~ "<=5",
+    deaths <= 25 ~ "[5-25]",
+    deaths <= 50 ~ "[25-50]",
+    deaths <= 100 ~ "[50-100]",
+    deaths <= 250 ~ "[100-250]",
+    deaths > 250 ~ ">250"
   ))
 
-data_filtered$deaths_category <- factor(data_filtered$deaths_category, levels = c("1-10", "11-50", "51-100", "101-200", ">200"))
+data_filtered$deaths_category <- factor(data_filtered$deaths_category, levels = c("<=5", "[5-25]", "[25-50]", "[50-100]", "[100-250]", ">250"))
 
 data_sf <- st_as_sf(data_filtered, coords = c("lon", "lat"), crs = 4326)
 
@@ -211,8 +212,8 @@ world <- gisco_get_countries(
 
 plot <- ggplot() +
   geom_sf(data = world, fill = "lightgray", color = "white") +
-  geom_sf(data = data_sf, aes(size = deaths_category), color = "red", alpha = 0.7) +
-  scale_size_manual(values = c("1-10" = 1, "11-50" = 3, "51-100" = 5, "101-200" = 7, ">200" = 10), name = "Number of Deaths") +
+  geom_sf(data = data_sf, aes(size = deaths_category), color = "red", fill = "red", alpha = 0.2) +
+  scale_size_manual(values = c("<=5" = 1, "[5-25]" = 3, "[25-50]" = 5, "[50-100]" = 7, "[100-250]" = 9, ">250" = 11), name = "Deaths") +
   theme_minimal() +
   coord_sf(xlim = c(-10, 40), ylim = c(25, 50), expand = FALSE) +
   labs(title = "Mare Nostrum / Mare Mortum", 
