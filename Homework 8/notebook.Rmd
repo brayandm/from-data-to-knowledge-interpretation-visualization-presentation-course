@@ -262,4 +262,47 @@ in all cases.
   variable continent as fill variable and save it as an image.
 
 ```{r, cache=TRUE} 
+library(sf)
+library(dplyr)
+library(cartogram)
+library(ggplot2)
+
+world <- st_read("data3/world.shp")
+
+births <- read.csv("data3/births.csv")
+
+births$iso_n3 <- sprintf("%.3d", births$iso_n3)
+
+head(births)
+head(world)
+
+world <- left_join(world, births, by = c("iso_n3"))
+
+world$Births[is.na(world$Births)] <- 100
+
+world$gdp_md_est[is.na(world$gdp_md_est)] <- 10
+
+world <- st_transform(world, crs = "+proj=robin")
+
+cartogram_births <- cartogram_cont(world, "Births", itermax = 7)
+cartogram_pop <- cartogram_cont(world, "pop_est", itermax = 7)
+cartogram_gdp <- cartogram_cont(world, "gdp_md_est", itermax = 7)
+
+world$facets <- "World"
+cartogram_births$facets <- "Births"
+cartogram_pop$facets <- "Population"
+cartogram_gdp$facets <- "GDP Estimate"
+combined <- rbind(world, cartogram_births, cartogram_pop, cartogram_gdp)
+
+plot <- ggplot(data = combined) +
+  geom_sf(aes(fill = continent)) +
+  facet_wrap(~facets) +
+  theme_minimal() +
+  labs(title = "Facet Map of the World and Cartograms",
+       fill = "Continent") +
+  theme(legend.position = "bottom")
+
+print(plot)
+
+ggsave("facet_map.png", plot = plot, width = 20, height = 10)
 ```
