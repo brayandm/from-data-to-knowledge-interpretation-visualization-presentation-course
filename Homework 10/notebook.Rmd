@@ -98,7 +98,7 @@ map_rank <- leaflet(data = world) %>%
       fillOpacity = 0.7,
       bringToFront = TRUE
     ),
-    label = ~paste(name, ": Average Rank ", round(Average_Rank, 2)),
+    label = ~ifelse(is.na(Average_Rank), paste(name, ": No Participation"), paste(name, ": Average Rank ", round(Average_Rank, 2))),
     labelOptions = labelOptions(
       style = list("font-weight" = "normal", padding = "3px 8px"),
       textsize = "15px",
