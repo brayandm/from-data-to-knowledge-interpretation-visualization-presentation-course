@@ -4,16 +4,60 @@ author: "Brayan Duran Medina"
 output: html_document
 ---
 
-## Exercise 1
-
-Using the pumps and death shapefiles of the famous map of John Snow about the data cholera outbreak in Soho in 1854, please produce an interactive cluster and heatmap using library leaflet.
+ICPC data
 
 ```{r}
-```
+library(leaflet)
+library(dplyr)
+library(readr)
+library(sf)
 
-## Exercise 2
+world <- st_read("data/world.shp")
 
-Using the data from the exercise about comparing the French and Chinese population living in Catalonia from session 7 please produce a bubble map to compare the relative distribution of these two population groups. You will need to add to your code a layer selector (addLayersControl), similar to the one used for the choropleth map.
+data <- read_csv("data/icpc-full.csv")
 
-```{r}
+host_counts <- data %>%
+  group_by(Host) %>%
+  summarise(Count = n()) %>%
+  ungroup()
+
+print(world)
+
+world <- world %>%
+  left_join(host_counts, by = c("name_long" = "Host"))
+
+world$Count[is.na(world$Count)] <- 0
+
+pal <- colorNumeric("YlOrRd", domain = world$Count)
+
+leaflet(data = world) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~pal(Count),
+    weight = 1,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = ~paste(name_long, ": ", Count, " times hosted"),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto"
+    )
+  ) %>%
+  addLegend(
+    pal = pal,
+    values = ~Count,
+    opacity = 0.7,
+    title = "Times Hosted",
+    position = "bottomright"
+  )
 ```
