@@ -10,6 +10,7 @@ ICPC data
 library(leaflet)
 library(dplyr)
 library(readr)
+library(htmltools)
 library(sf)
 
 world <- st_read("data/world.shp")
@@ -34,7 +35,7 @@ pal <- colorNumeric("YlOrRd", domain = world$Count)
 
 total_hosted <- sum(world$Count)
 
-leaflet(data = world) %>%
+map <- leaflet(data = world) %>%
   addTiles() %>%
   addPolygons(
     fillColor = ~pal(Count),
@@ -64,4 +65,21 @@ leaflet(data = world) %>%
     title = "Times Hosted",
     position = "bottomright"
   )
+
+title <- tags$div(
+  tags$style(HTML("
+    .leaflet-control.map-title { 
+      background-color: white; 
+      font-size: 18px; 
+      font-weight: bold; 
+      padding: 10px; 
+    }
+  ")),
+  tags$div("ICPC Hosting Countries Heatmap", class = "leaflet-control map-title")
+)
+
+map <- map %>%
+  addControl(title, position = "topright", className = "map-title")
+
+map
 ```
