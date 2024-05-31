@@ -18,6 +18,7 @@ world <- st_read("data/world.shp")
 data <- read_csv("data/icpc-full.csv")
 
 data$Host[data$Host == "Czechia"] <- "Czech Rep."
+data$Host[data$Country == "Czechia"] <- "Czech Rep."
 
 host_counts <- data %>%
   select(Year, Host) %>%
@@ -71,8 +72,9 @@ title <- tags$div(
     .leaflet-control.map-title { 
       background-color: white; 
       font-size: 18px; 
-      font-weight: bold; 
-      padding: 10px; 
+      font-weight: bold;
+        padding: 5px;
+        margin: 0;
     }
   ")),
   tags$div("ICPC Hosting Countries Heatmap", class = "leaflet-control map-title")
