@@ -17,14 +17,14 @@ world <- st_read("data/world.shp")
 data <- read_csv("data/icpc-full.csv")
 
 host_counts <- data %>%
+  select(Year, Host) %>%
+  distinct() %>%
   group_by(Host) %>%
   summarise(Count = n()) %>%
   ungroup()
 
-print(world)
-
 world <- world %>%
-  left_join(host_counts, by = c("name_long" = "Host"))
+  left_join(host_counts, by = c("name" = "Host"))
 
 world$Count[is.na(world$Count)] <- 0
 
@@ -46,7 +46,7 @@ leaflet(data = world) %>%
       fillOpacity = 0.7,
       bringToFront = TRUE
     ),
-    label = ~paste(name_long, ": ", Count, " times hosted"),
+    label = ~paste(name, ": ", Count, " times hosted"),
     labelOptions = labelOptions(
       style = list("font-weight" = "normal", padding = "3px 8px"),
       textsize = "15px",
