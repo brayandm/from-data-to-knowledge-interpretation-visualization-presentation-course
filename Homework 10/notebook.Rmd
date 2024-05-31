@@ -71,3 +71,9 @@ map <- leaflet(data = world) %>%
 
 map
 ```
+
+## International Collegiate Programming Contest (ICPC) Heatmap of Ranking Average
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, }
+
+```
