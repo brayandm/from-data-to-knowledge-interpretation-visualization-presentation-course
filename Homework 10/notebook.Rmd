@@ -4,9 +4,7 @@ author: "Brayan Duran Medina"
 output: html_document
 ---
 
-ICPC data
-
-```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, }
+```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, results='hide'}
 library(leaflet)
 library(dplyr)
 library(readr)
@@ -35,7 +33,11 @@ world$Count[is.na(world$Count)] <- 0
 pal <- colorNumeric("YlOrRd", domain = world$Count)
 
 total_hosted <- sum(world$Count)
+```
 
+## International Collegiate Programming Contest (ICPC) Heatmap of Host Countries
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, }
 map <- leaflet(data = world) %>%
   addTiles() %>%
   addPolygons(
@@ -66,22 +68,6 @@ map <- leaflet(data = world) %>%
     title = "Times Hosted",
     position = "bottomright"
   )
-
-title <- tags$div(
-  tags$style(HTML("
-    .leaflet-control.map-title { 
-      background-color: white; 
-      font-size: 18px; 
-      font-weight: bold;
-        padding: 5px;
-        margin: 0;
-    }
-  ")),
-  tags$div("ICPC Hosting Countries Heatmap", class = "leaflet-control map-title")
-)
-
-map <- map %>%
-  addControl(title, position = "topright", className = "map-title")
 
 map
 ```
