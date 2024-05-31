@@ -1,0 +1,19 @@
+---
+title: "Homework 10"
+author: "Brayan Duran Medina"
+output: html_document
+---
+
+## Exercise 1
+
+Using the pumps and death shapefiles of the famous map of John Snow about the data cholera outbreak in Soho in 1854, please produce an interactive cluster and heatmap using library leaflet.
+
+```{r}
+```
+
+## Exercise 2
+
+Using the data from the exercise about comparing the French and Chinese population living in Catalonia from session 7 please produce a bubble map to compare the relative distribution of these two population groups. You will need to add to your code a layer selector (addLayersControl), similar to the one used for the choropleth map.
+
+```{r}
+```
