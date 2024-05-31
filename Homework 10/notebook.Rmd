@@ -82,6 +82,9 @@ map_host
 ## International Collegiate Programming Contest (ICPC) Heatmap of Ranking Average
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, }
+world <- world %>%
+  filter(!is.na(Average_Rank))
+
 map_rank <- leaflet(data = world) %>%
   addTiles() %>%
   addPolygons(
