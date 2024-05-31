@@ -12,11 +12,10 @@ library(htmltools)
 library(sf)
 
 world <- st_read("data/world.shp")
-
 data <- read_csv("data/icpc-full.csv")
 
 data$Host[data$Host == "Czechia"] <- "Czech Rep."
-data$Host[data$Country == "Czechia"] <- "Czech Rep."
+data$Country[data$Country == "Czechia"] <- "Czech Rep."
 
 host_counts <- data %>%
   select(Year, Host) %>%
@@ -25,12 +24,20 @@ host_counts <- data %>%
   summarise(Count = n()) %>%
   ungroup()
 
+average_ranking <- data %>%
+  group_by(Country) %>%
+  summarise(Average_Rank = mean(Rank, na.rm = TRUE)) %>%
+  ungroup()
+
 world <- world %>%
-  left_join(host_counts, by = c("name" = "Host"))
+  left_join(host_counts, by = c("name" = "Host")) %>%
+  left_join(average_ranking, by = c("name" = "Country"))
 
 world$Count[is.na(world$Count)] <- 0
 
-pal <- colorNumeric("YlOrRd", domain = world$Count)
+pal_host <- colorNumeric("YlOrRd", domain = world$Count)
+
+pal_rank <- colorNumeric("YlGnBu", domain = world$Average_Rank, reverse = TRUE)
 
 total_hosted <- sum(world$Count)
 ```
@@ -38,10 +45,10 @@ total_hosted <- sum(world$Count)
 ## International Collegiate Programming Contest (ICPC) Heatmap of Host Countries
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, }
-map <- leaflet(data = world) %>%
+map_host <- leaflet(data = world) %>%
   addTiles() %>%
   addPolygons(
-    fillColor = ~pal(Count),
+    fillColor = ~pal_host(Count),
     weight = 1,
     opacity = 1,
     color = "white",
@@ -62,18 +69,49 @@ map <- leaflet(data = world) %>%
     )
   ) %>%
   addLegend(
-    pal = pal,
+    pal = pal_host,
     values = ~Count,
     opacity = 0.7,
     title = "Times Hosted",
     position = "bottomright"
   )
 
-map
+map_host
 ```
 
 ## International Collegiate Programming Contest (ICPC) Heatmap of Ranking Average
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, }
+map_rank <- leaflet(data = world) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~pal_rank(Average_Rank),
+    weight = 1,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = ~paste(name, ": Average Rank ", round(Average_Rank, 2)),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto"
+    )
+  ) %>%
+  addLegend(
+    pal = pal_rank,
+    values = ~Average_Rank,
+    opacity = 0.7,
+    title = "Average Ranking",
+    position = "bottomright"
+  )
 
+map_rank
 ```
