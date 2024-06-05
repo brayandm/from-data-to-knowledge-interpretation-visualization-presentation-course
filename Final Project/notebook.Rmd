@@ -128,13 +128,19 @@ icpc_data <- icpc_data %>%
          Continent = countrycode(Country, "country.name", "continent"))
 
 # Definir los países de América Latina y América del Norte
-latin_america_regions <- c("Central America", "South America", "Caribbean")
-north_america_regions <- c("Northern America")
+south_america_regions <- c("Latin America & Caribbean")
+north_america_regions <- c("North America")
+
+head(icpc_data)
+
+#print distinct regions
+
+print(unique(icpc_data$Region))
 
 # Asignar los continentes específicos
 icpc_data <- icpc_data %>%
   mutate(Continent = case_when(
-    Region %in% latin_america_regions ~ "Latin America",
+    Region %in% south_america_regions ~ "South America",
     Region %in% north_america_regions ~ "North America",
     TRUE ~ Continent
   ))
