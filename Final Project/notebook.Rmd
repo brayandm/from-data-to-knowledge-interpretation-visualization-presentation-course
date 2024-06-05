@@ -7,6 +7,7 @@ output: html_document
 ```{r}
 library(ggplot2)
 library(dplyr)
+library(countrycode)
 ```
 
 ```{r}
@@ -121,6 +122,28 @@ country_medals <- icpc_data %>%
 
 print(university_medals)
 print(country_medals)
+
+icpc_data <- icpc_data %>%
+  mutate(Region = countrycode(Country, "country.name", "region"),
+         Continent = countrycode(Country, "country.name", "continent"))
+
+# Definir los países de América Latina y América del Norte
+latin_america_regions <- c("Central America", "South America", "Caribbean")
+north_america_regions <- c("Northern America")
+
+# Asignar los continentes específicos
+icpc_data <- icpc_data %>%
+  mutate(Continent = case_when(
+    Region %in% latin_america_regions ~ "Latin America",
+    Region %in% north_america_regions ~ "North America",
+    TRUE ~ Continent
+  ))
+
+# Agrupar por continente y sumar las medallas
+continent_medals <- icpc_data %>%
+  group_by(Continent) %>%
+  summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %>%
+  arrange(desc(Total_Medals))
 ```
 
 ```{r}
@@ -142,9 +165,11 @@ ggsave("plot3.png", plot, width = 12, height = 6, units = "in", dpi = 300)
 ```
 
 ```{r}
+print(max(country_medals$Total_Medals))
 # Gráfico de barras horizontales para los países
 plot <- ggplot(country_medals, aes(x = reorder(Country, Total_Medals), y = Total_Medals)) +
   geom_bar(stat = "identity", fill = "darkorange") +
+  scale_y_continuous(breaks = seq(0, 87, by = 5)) +
   coord_flip() +
   labs(
     title = "Top 10 Countries with Most Medals",
@@ -156,4 +181,23 @@ plot <- ggplot(country_medals, aes(x = reorder(Country, Total_Medals), y = Total
 plot
 
 ggsave("plot4.png", plot, width = 12, height = 6, units = "in", dpi = 300)
+```
+
+```{r}
+# Gráfico de barras horizontales para los continentes
+print(max(continent_medals$Total_Medals))
+plot <- ggplot(continent_medals, aes(x = reorder(Continent, Total_Medals), y = Total_Medals)) +
+  geom_bar(stat = "identity", fill = "forestgreen") +
+  coord_flip() +
+  scale_y_continuous(breaks = seq(0, 156, by = 12)) +  # Ajusta los límites aquí
+  labs(
+    title = "Total Medals by Continent",
+    x = NULL,
+    y = "Total Medals"
+  ) +
+  theme_HS
+
+plot
+
+ggsave("plot5.png", plot, width = 12, height = 6, units = "in", dpi = 300)
 ```
