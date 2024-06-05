@@ -106,10 +106,11 @@ icpc_data <- icpc_data %>%
 
 # Agrupar por universidad y sumar las medallas
 university_medals <- icpc_data %>%
-  group_by(University) %>%
+  group_by(University, Country) %>%
   summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %>%
   arrange(desc(Total_Medals)) %>%
-  head(10)
+  head(10) %>%
+  mutate(University_Country = paste(University, " (", Country, ")", sep = ""))
 
 # Agrupar por país y sumar las medallas
 country_medals <- icpc_data %>%
@@ -124,7 +125,7 @@ print(country_medals)
 
 ```{r}
 # Gráfico de barras horizontales para las universidades
-plot <- ggplot(university_medals, aes(x = reorder(University, Total_Medals), y = Total_Medals)) +
+plot <- ggplot(university_medals, aes(x = reorder(University_Country, Total_Medals), y = Total_Medals)) +
   geom_bar(stat = "identity", fill = "purple") +
   coord_flip() +
   scale_y_continuous(breaks = seq(0, 16, by = 2)) +
