@@ -3,3 +3,93 @@ title: "Final Project"
 author: "Brayan Duran Medina"
 output: html_document
 ---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+
+theme_HS<-list(theme(plot.title = element_text(lineheight=1, size=15, face="bold"), #set parameters of title
+                     plot.subtitle = element_text(lineheight=1, size=12, face="bold"), # set parameters of subtitle
+                     plot.caption = element_text(lineheight=1, size=13, hjust=1), # set parameters of caption
+                     legend.title = element_blank (), # legend title (we don't want a title for the legens)
+                     legend.text = element_text(colour="black", size = 15), # set parameters of legend text
+                     legend.position="bottom", # set position of legend
+                     # legend.justification=c(1,0), # set justification of legend
+                     legend.background = element_rect(fill=NA, colour = NA), # set legend background
+                     legend.key.size = unit(1.5, 'lines'), # set size of simbols of the legend
+                     legend.key = element_rect(colour = NA, fill = NA), #set background of simbols in the legend
+                     axis.title.x = element_blank (), # set x axis title (we don't want a title for the legend)
+                     axis.text.x  = element_text(angle = 0,vjust=0.5, size=15,colour="black"), #set parameters of x axis text
+                     axis.title.y = element_text(vjust=2, size=15,colour="black"), # set y axis title 
+                     axis.text.y  = element_text(vjust=0.5, size=15,colour="black"), #set parameters of y axis text
+                     strip.text = element_text(size=15, face="bold"), #text for facets
+                     plot.background =  element_rect(fill = "white"), # set color of the background of the plot
+                     panel.grid.major=element_line(colour="#E6E6E6",linewidth=.5), # set color of major grid lines
+                     panel.grid.minor=element_line(colour="#E6E6E6",linewidth=.15), # set color of minor grid lines
+                     panel.border = element_rect(colour = "#585858", fill=NA, linewidth=.75), #set color of panel border line
+                     panel.background =element_rect(fill ="#FFFFFF", colour = "#FFFFFF"))) # set color of the background of the panel of the plot
+```
+
+```{r}
+icpc_data <- read.csv("data/icpc-full.csv")
+
+# head(icpc_data)
+
+# Asegurarse de que la columna Year sea de tipo numérico
+icpc_data$Year <- as.numeric(icpc_data$Year)
+
+# Contar el número de países y equipos por año
+participation_summary <- icpc_data %>%
+  group_by(Year) %>%
+  summarize(
+    num_countries = n_distinct(Country),
+    num_teams = n_distinct(Team)
+  )
+
+# Ver el resumen de participación
+head(participation_summary)
+```
+
+```{r}
+plot <- ggplot(participation_summary, aes(x = Year, y = num_countries)) +
+  geom_line(color = "steelblue", size = 1) +
+  geom_point(color = "steelblue", size = 2) +
+  annotate("rect", xmin = 2020, xmax = Inf, ymin = -Inf, ymax = Inf, alpha = 0.3, fill = "red") +
+  annotate("text", x = 2020, y = 55, 
+           label = "COVID-19\nPandemic", vjust = 1, hjust = -0.2, color = "red", size = 5, bold = TRUE) +
+scale_x_continuous(breaks = seq(1999, 2023, by = 3), limits = c(1999, 2023)) +
+  labs(
+    title = "Growth in Number of Participating Countries from 1999 to present",
+    x = "Year",
+    y = "Number of Countries"
+  ) +
+  theme_HS
+
+plot
+
+ggsave("plot.png", plot, width = 10, height = 6, units = "in", dpi = 300)
+```
+
+```{r}
+# Gráfico del crecimiento en el número de equipos participantes
+plot <- ggplot(participation_summary, aes(x = Year, y = num_teams)) +
+  geom_line(color = "darkorange", size = 1) +
+  geom_point(color = "darkorange", size = 2) +
+  annotate("rect", xmin = 2020, xmax = Inf, ymin = -Inf, ymax = Inf, alpha = 0.3, fill = "red") +
+  annotate("text", x = 2020, y = 150, 
+           label = "COVID-19\nPandemic", vjust = 1, hjust = -0.2, color = "red", size = 5, bold = TRUE) +
+  scale_x_continuous(breaks = seq(1999, 2023, by = 3), limits = c(1999, 2023)) +
+  labs(
+    title = "Growth in Number of Participating Teams from 1999 to present",
+    x = "Year",
+    y = "Number of Teams"
+  ) +
+  theme_HS
+
+plot
+
+ggsave("plot2.png", plot, width = 10, height = 6, units = "in", dpi = 300)
+```
