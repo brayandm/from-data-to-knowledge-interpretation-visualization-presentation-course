@@ -93,3 +93,66 @@ plot
 
 ggsave("plot2.png", plot, width = 10, height = 6, units = "in", dpi = 300)
 ```
+
+```{r}
+icpc_data <- icpc_data %>%
+  mutate(Gold = as.logical(Gold),
+         Silver = as.logical(Silver),
+         Bronze = as.logical(Bronze))
+
+# Crear una nueva columna que sume todas las medallas
+icpc_data <- icpc_data %>%
+  mutate(Total_Medals = Gold + Silver + Bronze)
+
+# Agrupar por universidad y sumar las medallas
+university_medals <- icpc_data %>%
+  group_by(University) %>%
+  summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %>%
+  arrange(desc(Total_Medals)) %>%
+  head(10)
+
+# Agrupar por país y sumar las medallas
+country_medals <- icpc_data %>%
+  group_by(Country) %>%
+  summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %>%
+  arrange(desc(Total_Medals)) %>%
+  head(10)
+
+print(university_medals)
+print(country_medals)
+```
+
+```{r}
+# Gráfico de barras horizontales para las universidades
+plot <- ggplot(university_medals, aes(x = reorder(University, Total_Medals), y = Total_Medals)) +
+  geom_bar(stat = "identity", fill = "purple") +
+  coord_flip() +
+  scale_y_continuous(breaks = seq(0, 16, by = 2)) +
+  labs(
+    title = "Top 10 Universities with Most Medals",
+    y = "Total Medals",
+    x = NULL
+  ) +
+    theme_HS
+
+plot
+
+ggsave("plot3.png", plot, width = 12, height = 6, units = "in", dpi = 300)
+```
+
+```{r}
+# Gráfico de barras horizontales para los países
+plot <- ggplot(country_medals, aes(x = reorder(Country, Total_Medals), y = Total_Medals)) +
+  geom_bar(stat = "identity", fill = "darkorange") +
+  coord_flip() +
+  labs(
+    title = "Top 10 Countries with Most Medals",
+    y = "Total Medals",
+    x = NULL
+  ) +
+    theme_HS
+
+plot
+
+ggsave("plot4.png", plot, width = 12, height = 6, units = "in", dpi = 300)
+```
