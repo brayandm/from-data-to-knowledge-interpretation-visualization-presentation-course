@@ -4,14 +4,13 @@ author: "Brayan Duran Medina"
 output: html_document
 ---
 
-```{r}
+```{r, cache=TRUE}
 library(ggplot2)
 library(dplyr)
 library(countrycode)
 ```
 
-```{r}
-
+```{r, cache=TRUE}
 theme_HS<-list(theme(plot.title = element_text(lineheight=1, size=15, face="bold"), #set parameters of title
                      plot.subtitle = element_text(lineheight=1, size=12, face="bold"), # set parameters of subtitle
                      plot.caption = element_text(lineheight=1, size=13, hjust=1), # set parameters of caption
@@ -34,7 +33,7 @@ theme_HS<-list(theme(plot.title = element_text(lineheight=1, size=15, face="bold
                      panel.background =element_rect(fill ="#FFFFFF", colour = "#FFFFFF"))) # set color of the background of the panel of the plot
 ```
 
-```{r}
+```{r, cache=TRUE}
 icpc_data <- read.csv("data/icpc-full.csv")
 
 # head(icpc_data)
@@ -54,7 +53,7 @@ participation_summary <- icpc_data %>%
 head(participation_summary)
 ```
 
-```{r}
+```{r, cache=TRUE}
 plot <- ggplot(participation_summary, aes(x = Year, y = num_countries)) +
   geom_line(color = "steelblue", size = 1) +
   geom_point(color = "steelblue", size = 2) +
@@ -74,7 +73,7 @@ plot
 ggsave("plot.png", plot, width = 10, height = 6, units = "in", dpi = 300)
 ```
 
-```{r}
+```{r, cache=TRUE}
 # Gráfico del crecimiento en el número de equipos participantes
 plot <- ggplot(participation_summary, aes(x = Year, y = num_teams)) +
   geom_line(color = "darkorange", size = 1) +
@@ -95,7 +94,7 @@ plot
 ggsave("plot2.png", plot, width = 10, height = 6, units = "in", dpi = 300)
 ```
 
-```{r}
+```{r, cache=TRUE}
 icpc_data <- icpc_data %>%
   mutate(Gold = as.logical(Gold),
          Silver = as.logical(Silver),
@@ -157,7 +156,7 @@ continent_medals <- icpc_data %>%
   arrange(desc(Total_Medals))
 ```
 
-```{r}
+```{r, cache=TRUE}
 # Gráfico de barras horizontales para las universidades
 plot <- ggplot(university_medals, aes(x = reorder(University_Country, Total_Medals), y = Total_Medals)) +
   geom_bar(stat = "identity", fill = "purple") +
@@ -175,7 +174,7 @@ plot
 ggsave("plot3.png", plot, width = 12, height = 6, units = "in", dpi = 300)
 ```
 
-```{r}
+```{r, cache=TRUE}
 print(max(country_medals$Total_Medals))
 # Gráfico de barras horizontales para los países
 plot <- ggplot(country_medals, aes(x = reorder(Country, Total_Medals), y = Total_Medals)) +
@@ -194,7 +193,7 @@ plot
 ggsave("plot4.png", plot, width = 12, height = 6, units = "in", dpi = 300)
 ```
 
-```{r}
+```{r, cache=TRUE}
 # Gráfico de barras horizontales para los continentes
 print(max(continent_medals$Total_Medals))
 plot <- ggplot(continent_medals, aes(x = reorder(Continent, Total_Medals), y = Total_Medals)) +
