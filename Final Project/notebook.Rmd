@@ -279,3 +279,97 @@ bar_plot
 ggsave("plot7.png", facet_plot, width = 12, height = 8, units = "in", dpi = 300)
 ggsave("plot6.png", bar_plot, width = 12, height = 8, units = "in", dpi = 300)
 ```
+
+```{r, cache=TRUE}
+icpc_data <- read.csv("data/icpc-full.csv")
+
+head(icpc_data)
+
+total_teams_per_year <- icpc_data %>%
+  group_by(Year) %>%
+  summarize(Total_Teams_Year = n())
+
+ranking_data <- icpc_data %>%
+  group_by(Country, Year) %>%
+  summarize(Average_Rank = ifelse(all(is.na(Rank)), NA, mean(Rank, na.rm = TRUE))) %>%
+  ungroup()
+
+ranking_data <- ranking_data %>%
+  left_join(total_teams_per_year, by = "Year")
+
+ranking_data <- ranking_data %>%
+  mutate(Average_Rank = ifelse(is.na(Average_Rank), Total_Teams_Year, Average_Rank))
+
+print(ranking_data)
+
+ranking_data <- ranking_data %>%
+  mutate(Scaled_Rank = (Average_Rank / Total_Teams_Year) * 100)
+
+all_years <- seq(min(ranking_data$Year), max(ranking_data$Year))
+all_countries <- unique(ranking_data$Country)
+
+all_combinations <- expand.grid(Country = all_countries, Year = all_years)
+
+ranking_data_complete <- all_combinations %>%
+  left_join(ranking_data, by = c("Country", "Year")) %>%
+  mutate(Scaled_Rank = ifelse(is.na(Scaled_Rank), 100, Scaled_Rank))
+
+get_slope <- function(data) {
+  model <- lm(Scaled_Rank ~ Year, data = data)
+  slope <- coef(model)["Year"]
+  return(slope)
+}
+
+country_slopes <- ranking_data_complete %>%
+  group_by(Country) %>%
+  summarize(Slope = get_slope(cur_data_all())) %>%
+  arrange(Slope)
+
+print(country_slopes)
+
+top_10_countries <- country_slopes %>%
+  top_n(10, -Slope)
+
+top_4_countries <- country_slopes %>%
+  top_n(4, -Slope) %>%
+  pull(Country)
+
+top_4_countries_data <- ranking_data_complete %>%
+  filter(Country %in% top_4_countries)
+
+top_4_countries_data$Country <- factor(top_4_countries_data$Country, levels = top_4_countries)
+
+print(top_10_countries)
+
+print(top_4_countries_data)
+
+facet_plot <- ggplot(top_4_countries_data, aes(x = Year, y = Scaled_Rank)) +
+  geom_line() +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  scale_y_continuous(breaks = seq(0, 100, by = 25), limits = c(0, 100)) +
+  scale_x_continuous(breaks = seq(1999, 2023, by = 4), limits = c(1999, 2023)) +
+  facet_wrap(~ Country, scales = "free_y") +
+  labs(
+    title = "Ranking Over Years for Top 4 Countries with Lowest Slopes",
+    x = NULL,
+    y = "Scaled Rank"
+  ) + theme_HS
+
+bar_plot <- ggplot(top_10_countries, aes(x = reorder(Country, Slope), y = Slope)) +
+  geom_bar(stat = "identity", fill = "dodgerblue") +
+  coord_flip() +
+  scale_y_continuous(breaks = seq(0, 0.4, by = 0.01)) +
+  labs(
+    title = "Top 10 Countries by Linear Regression Slope",
+    subtitle = "Indicating the Performance Trend Over Years",
+    x = NULL,
+    y = "Slope (Performance Trend)"
+  ) + theme_HS
+
+facet_plot
+bar_plot
+
+ggsave("plot9.png", facet_plot, width = 12, height = 8, units = "in", dpi = 300)
+ggsave("plot8.png", bar_plot, width = 12, height = 8, units = "in", dpi = 300)
+```
