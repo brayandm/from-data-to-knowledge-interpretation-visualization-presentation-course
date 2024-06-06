@@ -201,50 +201,41 @@ print(total_medals)
 library(broom)
 library(tidyr)
 
-# Leer el archivo CSV
 icpc_data <- read.csv("data/icpc-full.csv")
 
-# Convertir las columnas de medallas a valores lógicos
 icpc_data <- icpc_data %>%
   mutate(Gold = as.logical(Gold),
          Silver = as.logical(Silver),
          Bronze = as.logical(Bronze))
 
-# Crear una nueva columna que sume todas las medallas
 icpc_data <- icpc_data %>%
   mutate(Total_Medals = Gold + Silver + Bronze)
 
-# Agrupar por país y año, y sumar las medallas
 country_year_medals <- icpc_data %>%
   group_by(Country, Year) %>%
   summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %>%
   ungroup()
 
-# Crear un data frame con todas las combinaciones de país y año
 all_years <- seq(min(country_year_medals$Year), max(country_year_medals$Year))
 all_countries <- unique(country_year_medals$Country)
 
 all_combinations <- expand.grid(Country = all_countries, Year = all_years)
 
-# Unir con el data frame original y reemplazar NA con 0
 country_year_medals_complete <- all_combinations %>%
   left_join(country_year_medals, by = c("Country", "Year")) %>%
   mutate(Total_Medals = ifelse(is.na(Total_Medals), 0, Total_Medals))
 
-# Función para realizar regresión lineal y extraer la pendiente
 get_slope <- function(data) {
   model <- lm(Total_Medals ~ Year, data = data)
   slope <- coef(model)["Year"]
   return(slope)
 }
 
-# Aplicar la regresión lineal a cada país y obtener las pendientes
 country_slopes <- country_year_medals_complete %>%
   group_by(Country) %>%
   summarize(Slope = get_slope(cur_data_all())) %>%
   arrange(desc(Slope))
 
-# Filtrar los datos para los 4 países con la mayor pendiente
 top_4_countries <- country_slopes %>%
   top_n(4, Slope) %>%
   pull(Country)
@@ -252,12 +243,9 @@ top_4_countries <- country_slopes %>%
 top_4_countries_data <- country_year_medals_complete %>%
   filter(Country %in% top_4_countries)
 
-#reordenar los paises top 4 en el orden de la pendiente
-
 top_4_countries_data$Country <- factor(top_4_countries_data$Country, levels = top_4_countries)
 
 
-# Crear el facet plot con líneas de regresión
 facet_plot <- ggplot(top_4_countries_data, aes(x = Year, y = Total_Medals)) +
   geom_line() +
   geom_point() +
@@ -271,11 +259,9 @@ facet_plot <- ggplot(top_4_countries_data, aes(x = Year, y = Total_Medals)) +
     y = "Total Medals"
   ) + theme_HS
 
-# Filtrar los datos para los 10 países con la mayor pendiente
 top_10_countries <- country_slopes %>%
   top_n(10, Slope)
 
-# Crear el gráfico de barras
 bar_plot <- ggplot(top_10_countries, aes(x = reorder(Country, Slope), y = Slope)) +
   geom_bar(stat = "identity", fill = "dodgerblue") +
   coord_flip() +
@@ -287,13 +273,9 @@ bar_plot <- ggplot(top_10_countries, aes(x = reorder(Country, Slope), y = Slope)
     y = "Slope (Performance Trend)"
   ) + theme_HS
 
-# Mostrar los gráficos
 facet_plot
 bar_plot
 
-# Guardar los gráficos en archivos PNG
-
 ggsave("plot7.png", facet_plot, width = 12, height = 8, units = "in", dpi = 300)
 ggsave("plot6.png", bar_plot, width = 12, height = 8, units = "in", dpi = 300)
-
 ```
