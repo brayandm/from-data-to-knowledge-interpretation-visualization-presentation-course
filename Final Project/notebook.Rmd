@@ -357,7 +357,7 @@ facet_plot <- ggplot(top_4_countries_data, aes(x = Year, y = Scaled_Rank)) +
   ) + theme_HS
 
 bar_plot <- ggplot(top_10_countries, aes(x = reorder(Country, Slope), y = Slope)) +
-  geom_bar(stat = "identity", fill = "dodgerblue") +
+  geom_bar(stat = "identity", fill = "brown") +
   coord_flip() +
   labs(
     title = "Top 10 Countries by Linear Regression Slope",
@@ -371,4 +371,25 @@ bar_plot
 
 ggsave("plot9.png", facet_plot, width = 12, height = 8, units = "in", dpi = 300)
 ggsave("plot8.png", bar_plot, width = 12, height = 8, units = "in", dpi = 300)
+
+# Special plot for Cuba
+
+cuba_data <- ranking_data_complete %>%
+  filter(Country == "Cuba")
+
+cuba_plot <- ggplot(cuba_data, aes(x = Year, y = Scaled_Rank)) +
+  geom_line() +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  scale_y_continuous(breaks = seq(0, 100, by = 25), limits = c(0, 100)) +
+  scale_x_continuous(breaks = seq(1999, 2023, by = 4), limits = c(1999, 2023)) +
+  labs(
+    title = "Ranking Over Years for Cuba",
+    x = NULL,
+    y = "Scaled Rank"
+  ) + theme_HS
+
+cuba_plot
+
+ggsave("plot10.png", cuba_plot, width = 12, height = 6, units = "in", dpi = 300)
 ```
