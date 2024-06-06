@@ -372,8 +372,6 @@ bar_plot
 ggsave("plot9.png", facet_plot, width = 12, height = 8, units = "in", dpi = 300)
 ggsave("plot8.png", bar_plot, width = 12, height = 8, units = "in", dpi = 300)
 
-# Special plot for Cuba
-
 cuba_data <- ranking_data_complete %>%
   filter(Country == "Cuba")
 
@@ -392,4 +390,119 @@ cuba_plot <- ggplot(cuba_data, aes(x = Year, y = Scaled_Rank)) +
 cuba_plot
 
 ggsave("plot10.png", cuba_plot, width = 12, height = 6, units = "in", dpi = 300)
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, results='hide', cache=TRUE}
+library(leaflet)
+library(dplyr)
+library(readr)
+library(htmltools)
+library(sf)
+
+world <- st_read("data/world.shp")
+data <- read_csv("data/icpc-full.csv")
+
+data$Host[data$Host == "Czechia"] <- "Czech Rep."
+data$Country[data$Country == "Czechia"] <- "Czech Rep."
+
+host_counts <- data %>%
+  select(Year, Host) %>%
+  distinct() %>%
+  group_by(Host) %>%
+  summarise(Count = n()) %>%
+  ungroup()
+
+average_ranking <- data %>%
+  group_by(Country) %>%
+  summarise(Average_Rank = mean(Rank, na.rm = TRUE)) %>%
+  ungroup()
+
+world <- world %>%
+  left_join(host_counts, by = c("name" = "Host")) %>%
+  left_join(average_ranking, by = c("name" = "Country"))
+
+world$Count[is.na(world$Count)] <- 0
+
+pal_host <- colorNumeric("YlOrRd", domain = world$Count)
+
+pal_rank <- colorNumeric("YlGnBu", domain = world$Average_Rank, reverse = TRUE)
+
+total_hosted <- sum(world$Count)
+```
+
+## International Collegiate Programming Contest (ICPC) Heatmap of Host Countries
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, cache=TRUE}
+map_host <- leaflet(data = world) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~pal_host(Count),
+    weight = 1,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = ~paste(name, ": ", Count, " times hosted"),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto"
+    )
+  ) %>%
+  addLegend(
+    pal = pal_host,
+    values = ~Count,
+    opacity = 0.7,
+    title = "Times Hosted",
+    position = "bottomright"
+  )
+
+map_host
+```
+
+## International Collegiate Programming Contest (ICPC) Heatmap of Ranking Average
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, cache=TRUE}
+world <- world %>%
+  filter(!is.na(Average_Rank))
+
+map_rank <- leaflet(data = world) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~pal_rank(Average_Rank),
+    weight = 1,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = ~ifelse(is.na(Average_Rank), paste(name, ": No Participation"), paste(name, ": Average Rank ", round(Average_Rank, 2))),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto"
+    )
+  ) %>%
+  addLegend(
+    pal = pal_rank,
+    values = ~Average_Rank,
+    opacity = 0.7,
+    title = "Average Ranking",
+    position = "bottomright"
+  )
+
+map_rank
 ```
