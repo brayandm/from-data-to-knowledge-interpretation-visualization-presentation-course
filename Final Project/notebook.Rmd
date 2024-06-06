@@ -36,12 +36,8 @@ theme_HS<-list(theme(plot.title = element_text(lineheight=1, size=15, face="bold
 ```{r, cache=TRUE}
 icpc_data <- read.csv("data/icpc-full.csv")
 
-# head(icpc_data)
-
-# Asegurarse de que la columna Year sea de tipo numérico
 icpc_data$Year <- as.numeric(icpc_data$Year)
 
-# Contar el número de países y equipos por año
 participation_summary <- icpc_data %>%
   group_by(Year) %>%
   summarize(
@@ -49,7 +45,6 @@ participation_summary <- icpc_data %>%
     num_teams = n_distinct(Team)
   )
 
-# Ver el resumen de participación
 head(participation_summary)
 ```
 
@@ -74,7 +69,6 @@ ggsave("plot.png", plot, width = 10, height = 6, units = "in", dpi = 300)
 ```
 
 ```{r, cache=TRUE}
-# Gráfico del crecimiento en el número de equipos participantes
 plot <- ggplot(participation_summary, aes(x = Year, y = num_teams)) +
   geom_line(color = "darkorange", size = 1) +
   geom_point(color = "darkorange", size = 2) +
@@ -101,15 +95,11 @@ icpc_data <- icpc_data %>%
          Bronze = as.logical(Bronze))
 
 
-# Crear una nueva columna que sume todas las medallas
 icpc_data <- icpc_data %>%
   mutate(Total_Medals = Gold + Silver + Bronze)
 
-# print total medals
-
 print(sum(icpc_data$Total_Medals))
 
-# Agrupar por universidad y sumar las medallas
 university_medals <- icpc_data %>%
   group_by(University, Country) %>%
   summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %>%
@@ -117,7 +107,6 @@ university_medals <- icpc_data %>%
   head(10) %>%
   mutate(University_Country = paste(University, " (", Country, ")", sep = ""))
 
-# Agrupar por país y sumar las medallas
 country_medals <- icpc_data %>%
   group_by(Country) %>%
   summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %>%
@@ -131,17 +120,13 @@ icpc_data <- icpc_data %>%
   mutate(Region = countrycode(Country, "country.name", "region"),
          Continent = countrycode(Country, "country.name", "continent"))
 
-# Definir los países de América Latina y América del Norte
 south_america_regions <- c("Latin America & Caribbean")
 north_america_regions <- c("North America")
 
 head(icpc_data)
 
-#print distinct regions
-
 print(unique(icpc_data$Region))
 
-# Asignar los continentes específicos
 icpc_data <- icpc_data %>%
   mutate(Continent = case_when(
     Region %in% south_america_regions ~ "South America",
@@ -149,7 +134,6 @@ icpc_data <- icpc_data %>%
     TRUE ~ Continent
   ))
 
-# Agrupar por continente y sumar las medallas
 continent_medals <- icpc_data %>%
   group_by(Continent) %>%
   summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %>%
@@ -157,7 +141,6 @@ continent_medals <- icpc_data %>%
 ```
 
 ```{r, cache=TRUE}
-# Gráfico de barras horizontales para las universidades
 plot <- ggplot(university_medals, aes(x = reorder(University_Country, Total_Medals), y = Total_Medals)) +
   geom_bar(stat = "identity", fill = "purple") +
   coord_flip() +
@@ -176,7 +159,6 @@ ggsave("plot3.png", plot, width = 12, height = 6, units = "in", dpi = 300)
 
 ```{r, cache=TRUE}
 print(max(country_medals$Total_Medals))
-# Gráfico de barras horizontales para los países
 plot <- ggplot(country_medals, aes(x = reorder(Country, Total_Medals), y = Total_Medals)) +
   geom_bar(stat = "identity", fill = "darkorange") +
   scale_y_continuous(breaks = seq(0, 87, by = 5)) +
@@ -194,12 +176,11 @@ ggsave("plot4.png", plot, width = 12, height = 6, units = "in", dpi = 300)
 ```
 
 ```{r, cache=TRUE}
-# Gráfico de barras horizontales para los continentes
 print(max(continent_medals$Total_Medals))
 plot <- ggplot(continent_medals, aes(x = reorder(Continent, Total_Medals), y = Total_Medals)) +
   geom_bar(stat = "identity", fill = "forestgreen") +
   coord_flip() +
-  scale_y_continuous(breaks = seq(0, 156, by = 12)) +  # Ajusta los límites aquí
+  scale_y_continuous(breaks = seq(0, 156, by = 12)) + 
   labs(
     title = "Total Medals by Continent",
     x = NULL,
@@ -214,4 +195,47 @@ ggsave("plot5.png", plot, width = 12, height = 6, units = "in", dpi = 300)
 total_medals <- sum(continent_medals$Total_Medals)
 
 print(total_medals)
+```
+
+```{r, cache=TRUE}
+library(broom)
+
+icpc_data <- read.csv("data/icpc-full.csv")
+
+# Ver las primeras filas del dataset
+head(icpc_data)
+
+# Convertir las columnas de medallas a valores lógicos
+icpc_data <- icpc_data %>%
+  mutate(Gold = as.logical(Gold),
+         Silver = as.logical(Silver),
+         Bronze = as.logical(Bronze))
+
+# Crear una nueva columna que sume todas las medallas
+icpc_data <- icpc_data %>%
+  mutate(Total_Medals = Gold + Silver + Bronze)
+
+# Agrupar por universidad y año, y sumar las medallas
+university_year_medals <- icpc_data %>%
+  group_by(University, Year) %>%
+  summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %>%
+  ungroup()
+
+# Ver el resumen de medallas por universidad y año
+head(university_year_medals)
+
+# Función para realizar regresión lineal y extraer la pendiente
+get_slope <- function(data) {
+  model <- lm(Total_Medals ~ Year, data = data)
+  slope <- coef(model)["Year"]
+  return(slope)
+}
+
+# Aplicar la regresión lineal a cada universidad y obtener las pendientes
+university_slopes <- university_year_medals %>%
+  group_by(University) %>%
+  summarize(Slope = get_slope(cur_data_all()))
+
+# Ver las pendientes obtenidas
+head(university_slopes)
 ```
