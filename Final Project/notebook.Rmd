@@ -101,9 +101,14 @@ icpc_data <- icpc_data %>%
          Silver = as.logical(Silver),
          Bronze = as.logical(Bronze))
 
+
 # Crear una nueva columna que sume todas las medallas
 icpc_data <- icpc_data %>%
   mutate(Total_Medals = Gold + Silver + Bronze)
+
+# print total medals
+
+print(sum(icpc_data$Total_Medals))
 
 # Agrupar por universidad y sumar las medallas
 university_medals <- icpc_data %>%
@@ -206,4 +211,8 @@ plot <- ggplot(continent_medals, aes(x = reorder(Continent, Total_Medals), y = T
 plot
 
 ggsave("plot5.png", plot, width = 12, height = 6, units = "in", dpi = 300)
+
+total_medals <- sum(continent_medals$Total_Medals)
+
+print(total_medals)
 ```
