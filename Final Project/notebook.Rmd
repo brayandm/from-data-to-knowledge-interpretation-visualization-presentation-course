@@ -274,7 +274,8 @@ facet_plot <- ggplot(top_4_countries_data, aes(x = Year, y = Total_Medals)) +
   theme(
     plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
     axis.title = element_text(size = 14),
-    axis.text = element_text(size = 12)
+    axis.text = element_text(size = 12),
+    strip.text = element_text(size=14)
   )
 
 # Filtrar los datos para los 10 países con la mayor pendiente
