@@ -269,14 +269,7 @@ facet_plot <- ggplot(top_4_countries_data, aes(x = Year, y = Total_Medals)) +
     title = "Medals Over Years for Top 4 Countries with Highest Slopes",
     x = NULL,
     y = "Total Medals"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
-    axis.title = element_text(size = 14),
-    axis.text = element_text(size = 12),
-    strip.text = element_text(size=14)
-  )
+  ) + theme_HS
 
 # Filtrar los datos para los 10 países con la mayor pendiente
 top_10_countries <- country_slopes %>%
@@ -292,19 +285,7 @@ bar_plot <- ggplot(top_10_countries, aes(x = reorder(Country, Slope), y = Slope)
     subtitle = "Indicating the Performance Trend Over Years",
     x = NULL,
     y = "Slope (Performance Trend)"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 12),
-    axis.title = element_text(size = 14),
-    axis.title.x = element_text(size = 14, margin = margin(t = 10)),
-    axis.title.y = element_text(size = 14, margin = margin(t = 10)),
-    #iincrease x label size
-    axis.text.x = element_text(size = 12),
-    axis.text.y = element_text(size = 12),
-    
-  )
+  ) + theme_HS
 
 # Mostrar los gráficos
 facet_plot
