@@ -392,7 +392,7 @@ cuba_plot
 ggsave("plot10.png", cuba_plot, width = 12, height = 6, units = "in", dpi = 300)
 ```
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, results='hide', cache=TRUE}
+```{r}
 library(leaflet)
 library(dplyr)
 library(readr)
@@ -412,10 +412,39 @@ host_counts <- data %>%
   summarise(Count = n()) %>%
   ungroup()
 
-average_ranking <- data %>%
-  group_by(Country) %>%
-  summarise(Average_Rank = mean(Rank, na.rm = TRUE)) %>%
+total_teams_per_year <- icpc_data %>%
+  group_by(Year) %>%
+  summarize(Total_Teams_Year = n())
+
+ranking_data <- icpc_data %>%
+  group_by(Country, Year) %>%
+  summarize(Average_Rank = ifelse(all(is.na(Rank)), NA, mean(Rank, na.rm = TRUE))) %>%
   ungroup()
+
+ranking_data <- ranking_data %>%
+  left_join(total_teams_per_year, by = "Year")
+
+ranking_data <- ranking_data %>%
+  mutate(Average_Rank = ifelse(is.na(Average_Rank), Total_Teams_Year, Average_Rank))
+
+print(ranking_data)
+
+ranking_data <- ranking_data %>%
+  mutate(Scaled_Rank = (Average_Rank / Total_Teams_Year) * 100)
+
+all_years <- seq(min(ranking_data$Year), max(ranking_data$Year))
+all_countries <- unique(ranking_data$Country)
+
+all_combinations <- expand.grid(Country = all_countries, Year = all_years)
+
+ranking_data_complete <- all_combinations %>%
+  left_join(ranking_data, by = c("Country", "Year")) %>%
+  mutate(Scaled_Rank = ifelse(is.na(Scaled_Rank), 100, Scaled_Rank))
+
+average_ranking <- ranking_data_complete %>%
+  group_by(Country) %>%
+  summarize(Average_Rank = mean(Scaled_Rank, na.rm = TRUE)) %>%
+  arrange(Average_Rank)
 
 world <- world %>%
   left_join(host_counts, by = c("name" = "Host")) %>%
@@ -432,7 +461,7 @@ total_hosted <- sum(world$Count)
 
 ## International Collegiate Programming Contest (ICPC) Heatmap of Host Countries
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, cache=TRUE}
+```{r}
 map_host <- leaflet(data = world) %>%
   addTiles() %>%
   addPolygons(
@@ -469,7 +498,7 @@ map_host
 
 ## International Collegiate Programming Contest (ICPC) Heatmap of Ranking Average
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, error = FALSE, cache=TRUE}
+```{r}
 world <- world %>%
   filter(!is.na(Average_Rank))
 
