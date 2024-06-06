@@ -252,11 +252,17 @@ top_4_countries <- country_slopes %>%
 top_4_countries_data <- country_year_medals_complete %>%
   filter(Country %in% top_4_countries)
 
+#reordenar los paises top 4 en el orden de la pendiente
+
+top_4_countries_data$Country <- factor(top_4_countries_data$Country, levels = top_4_countries)
+
+
 # Crear el facet plot con líneas de regresión
 facet_plot <- ggplot(top_4_countries_data, aes(x = Year, y = Total_Medals)) +
   geom_line() +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, color = "red") +
+  scale_y_continuous(breaks = seq(0, 2, by = 1), limits = c(0, 2)) +
   facet_wrap(~ Country, scales = "free_y") +
   labs(
     title = "Medals Over Years for Top 4 Countries with Highest Slopes",
@@ -278,6 +284,7 @@ top_10_countries <- country_slopes %>%
 bar_plot <- ggplot(top_10_countries, aes(x = reorder(Country, Slope), y = Slope)) +
   geom_bar(stat = "identity", fill = "dodgerblue") +
   coord_flip() +
+  scale_y_continuous(breaks = seq(0, 0.4, by = 0.01)) +
   labs(
     title = "Top 10 Countries by Linear Regression Slope",
     subtitle = "Indicating the Performance Trend Over Years",
@@ -296,5 +303,9 @@ bar_plot <- ggplot(top_10_countries, aes(x = reorder(Country, Slope), y = Slope)
 facet_plot
 bar_plot
 
+# Guardar los gráficos en archivos PNG
+
+ggsave("plot7.png", facet_plot, width = 12, height = 8, units = "in", dpi = 300)
+ggsave("plot6.png", bar_plot, width = 12, height = 8, units = "in", dpi = 300)
 
 ```
