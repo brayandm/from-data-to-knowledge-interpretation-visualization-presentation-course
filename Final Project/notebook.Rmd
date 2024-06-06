@@ -359,7 +359,6 @@ facet_plot <- ggplot(top_4_countries_data, aes(x = Year, y = Scaled_Rank)) +
 bar_plot <- ggplot(top_10_countries, aes(x = reorder(Country, Slope), y = Slope)) +
   geom_bar(stat = "identity", fill = "dodgerblue") +
   coord_flip() +
-  scale_y_continuous(breaks = seq(0, 0.4, by = 0.01)) +
   labs(
     title = "Top 10 Countries by Linear Regression Slope",
     subtitle = "Indicating the Performance Trend Over Years",
