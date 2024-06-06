@@ -199,11 +199,10 @@ print(total_medals)
 
 ```{r, cache=TRUE}
 library(broom)
+library(tidyr)
 
+# Leer el archivo CSV
 icpc_data <- read.csv("data/icpc-full.csv")
-
-# Ver las primeras filas del dataset
-head(icpc_data)
 
 # Convertir las columnas de medallas a valores lógicos
 icpc_data <- icpc_data %>%
@@ -221,9 +220,6 @@ country_year_medals <- icpc_data %>%
   summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %>%
   ungroup()
 
-# Ver el resumen de medallas por país y año
-head(country_year_medals)
-
 # Crear un data frame con todas las combinaciones de país y año
 all_years <- seq(min(country_year_medals$Year), max(country_year_medals$Year))
 all_countries <- unique(country_year_medals$Country)
@@ -235,9 +231,6 @@ country_year_medals_complete <- all_combinations %>%
   left_join(country_year_medals, by = c("Country", "Year")) %>%
   mutate(Total_Medals = ifelse(is.na(Total_Medals), 0, Total_Medals))
 
-# Ver el data frame completo con años llenos
-head(country_year_medals_complete)
-
 # Función para realizar regresión lineal y extraer la pendiente
 get_slope <- function(data) {
   model <- lm(Total_Medals ~ Year, data = data)
@@ -248,17 +241,60 @@ get_slope <- function(data) {
 # Aplicar la regresión lineal a cada país y obtener las pendientes
 country_slopes <- country_year_medals_complete %>%
   group_by(Country) %>%
-  summarize(Slope = get_slope(cur_data_all()))
-
-# Ver las pendientes obtenidas
-head(country_slopes)
-
-# Ordenar los países por pendiente
-
-
-country_slopes <- country_slopes %>%
+  summarize(Slope = get_slope(cur_data_all())) %>%
   arrange(desc(Slope))
 
-print(country_slopes)
+# Filtrar los datos para los 4 países con la mayor pendiente
+top_4_countries <- country_slopes %>%
+  top_n(4, Slope) %>%
+  pull(Country)
+
+top_4_countries_data <- country_year_medals_complete %>%
+  filter(Country %in% top_4_countries)
+
+# Crear el facet plot con líneas de regresión
+facet_plot <- ggplot(top_4_countries_data, aes(x = Year, y = Total_Medals)) +
+  geom_line() +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  facet_wrap(~ Country, scales = "free_y") +
+  labs(
+    title = "Medals Over Years for Top 4 Countries with Highest Slopes",
+    x = "Year",
+    y = "Total Medals"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12)
+  )
+
+# Filtrar los datos para los 10 países con la mayor pendiente
+top_10_countries <- country_slopes %>%
+  top_n(10, Slope)
+
+# Crear el gráfico de barras
+bar_plot <- ggplot(top_10_countries, aes(x = reorder(Country, Slope), y = Slope)) +
+  geom_bar(stat = "identity", fill = "dodgerblue") +
+  coord_flip() +
+  labs(
+    title = "Top 10 Countries by Linear Regression Slope",
+    subtitle = "Indicating the Performance Trend Over Years",
+    x = "Country",
+    y = "Slope (Performance Trend)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12)
+  )
+
+# Mostrar los gráficos
+facet_plot
+bar_plot
+
 
 ```
