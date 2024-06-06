@@ -356,7 +356,7 @@ facet_plot <- ggplot(top_4_countries_data, aes(x = Year, y = Scaled_Rank)) +
     y = "Scaled Rank"
   ) + theme_HS
 
-bar_plot <- ggplot(top_10_countries, aes(x = reorder(Country, Slope), y = Slope)) +
+bar_plot <- ggplot(top_10_countries, aes(x = reorder(Country, -Slope), y = Slope)) +
   geom_bar(stat = "identity", fill = "brown") +
   coord_flip() +
   labs(
