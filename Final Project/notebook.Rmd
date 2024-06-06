@@ -215,14 +215,28 @@ icpc_data <- icpc_data %>%
 icpc_data <- icpc_data %>%
   mutate(Total_Medals = Gold + Silver + Bronze)
 
-# Agrupar por universidad y año, y sumar las medallas
-university_year_medals <- icpc_data %>%
-  group_by(University, Year) %>%
+# Agrupar por país y año, y sumar las medallas
+country_year_medals <- icpc_data %>%
+  group_by(Country, Year) %>%
   summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %>%
   ungroup()
 
-# Ver el resumen de medallas por universidad y año
-head(university_year_medals)
+# Ver el resumen de medallas por país y año
+head(country_year_medals)
+
+# Crear un data frame con todas las combinaciones de país y año
+all_years <- seq(min(country_year_medals$Year), max(country_year_medals$Year))
+all_countries <- unique(country_year_medals$Country)
+
+all_combinations <- expand.grid(Country = all_countries, Year = all_years)
+
+# Unir con el data frame original y reemplazar NA con 0
+country_year_medals_complete <- all_combinations %>%
+  left_join(country_year_medals, by = c("Country", "Year")) %>%
+  mutate(Total_Medals = ifelse(is.na(Total_Medals), 0, Total_Medals))
+
+# Ver el data frame completo con años llenos
+head(country_year_medals_complete)
 
 # Función para realizar regresión lineal y extraer la pendiente
 get_slope <- function(data) {
@@ -231,11 +245,20 @@ get_slope <- function(data) {
   return(slope)
 }
 
-# Aplicar la regresión lineal a cada universidad y obtener las pendientes
-university_slopes <- university_year_medals %>%
-  group_by(University) %>%
+# Aplicar la regresión lineal a cada país y obtener las pendientes
+country_slopes <- country_year_medals_complete %>%
+  group_by(Country) %>%
   summarize(Slope = get_slope(cur_data_all()))
 
 # Ver las pendientes obtenidas
-head(university_slopes)
+head(country_slopes)
+
+# Ordenar los países por pendiente
+
+
+country_slopes <- country_slopes %>%
+  arrange(desc(Slope))
+
+print(country_slopes)
+
 ```

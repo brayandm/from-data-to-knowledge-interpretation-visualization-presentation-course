@@ -661,24 +661,44 @@ icpc_data &lt;- icpc_data %&gt;%
 icpc_data &lt;- icpc_data %&gt;%
   mutate(Total_Medals = Gold + Silver + Bronze)
 
-# Agrupar por universidad y año, y sumar las medallas
-university_year_medals &lt;- icpc_data %&gt;%
-  group_by(University, Year) %&gt;%
+# Agrupar por país y año, y sumar las medallas
+country_year_medals &lt;- icpc_data %&gt;%
+  group_by(Country, Year) %&gt;%
   summarize(Total_Medals = sum(Total_Medals, na.rm = TRUE)) %&gt;%
   ungroup()</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;University&#39;. You can override using the
+<pre><code>## `summarise()` has grouped output by &#39;Country&#39;. You can override using the
 ## `.groups` argument.</code></pre>
-<pre class="r"><code># Ver el resumen de medallas por universidad y año
-head(university_year_medals)</code></pre>
+<pre class="r"><code># Ver el resumen de medallas por país y año
+head(country_year_medals)</code></pre>
 <pre><code>## # A tibble: 6 × 3
-##   University                                                   Year Total_Medals
-##   &lt;chr&gt;                                                       &lt;int&gt;        &lt;int&gt;
-## 1 ADA University                                               2022            0
-## 2 AGH University of Science and Technology                     2008            0
-## 3 Aalto University                                             2012            0
-## 4 Adama Science and Technology University                      2021            0
-## 5 Ain Shams University - Faculty of Computer and Information…  2020            0
-## 6 Ain Shams University - Faculty of Computer and Information…  2021            0</code></pre>
+##   Country      Year Total_Medals
+##   &lt;chr&gt;       &lt;int&gt;        &lt;int&gt;
+## 1 Afghanistan  2020            0
+## 2 Argentina    1999            0
+## 3 Argentina    2000            0
+## 4 Argentina    2001            0
+## 5 Argentina    2002            1
+## 6 Argentina    2003            1</code></pre>
+<pre class="r"><code># Crear un data frame con todas las combinaciones de país y año
+all_years &lt;- seq(min(country_year_medals$Year), max(country_year_medals$Year))
+all_countries &lt;- unique(country_year_medals$Country)
+
+all_combinations &lt;- expand.grid(Country = all_countries, Year = all_years)
+
+# Unir con el data frame original y reemplazar NA con 0
+country_year_medals_complete &lt;- all_combinations %&gt;%
+  left_join(country_year_medals, by = c(&quot;Country&quot;, &quot;Year&quot;)) %&gt;%
+  mutate(Total_Medals = ifelse(is.na(Total_Medals), 0, Total_Medals))
+
+# Ver el data frame completo con años llenos
+head(country_year_medals_complete)</code></pre>
+<pre><code>##       Country Year Total_Medals
+## 1 Afghanistan 1999            0
+## 2   Argentina 1999            0
+## 3     Armenia 1999            0
+## 4   Australia 1999            0
+## 5     Austria 1999            0
+## 6  Azerbaijan 1999            0</code></pre>
 <pre class="r"><code># Función para realizar regresión lineal y extraer la pendiente
 get_slope &lt;- function(data) {
   model &lt;- lm(Total_Medals ~ Year, data = data)
@@ -686,27 +706,48 @@ get_slope &lt;- function(data) {
   return(slope)
 }
 
-# Aplicar la regresión lineal a cada universidad y obtener las pendientes
-university_slopes &lt;- university_year_medals %&gt;%
-  group_by(University) %&gt;%
+# Aplicar la regresión lineal a cada país y obtener las pendientes
+country_slopes &lt;- country_year_medals_complete %&gt;%
+  group_by(Country) %&gt;%
   summarize(Slope = get_slope(cur_data_all()))</code></pre>
 <pre><code>## Warning: There was 1 warning in `summarize()`.
 ## ℹ In argument: `Slope = get_slope(cur_data_all())`.
-## ℹ In group 1: `University = &quot;ADA University&quot;`.
+## ℹ In group 1: `Country = &quot;Afghanistan&quot;`.
 ## Caused by warning:
 ## ! `cur_data_all()` was deprecated in dplyr 1.1.0.
 ## ℹ Please use `pick()` instead.</code></pre>
 <pre class="r"><code># Ver las pendientes obtenidas
-head(university_slopes)</code></pre>
+head(country_slopes)</code></pre>
 <pre><code>## # A tibble: 6 × 2
-##   University                                                          Slope
-##   &lt;chr&gt;                                                               &lt;dbl&gt;
-## 1 ADA University                                                         NA
-## 2 AGH University of Science and Technology                               NA
-## 3 Aalto University                                                       NA
-## 4 Adama Science and Technology University                                NA
-## 5 Ain Shams University - Faculty of Computer and Information Sciences     0
-## 6 Ain Shams University - Faculty of Engineering                          NA</code></pre>
+##   Country       Slope
+##   &lt;chr&gt;         &lt;dbl&gt;
+## 1 Afghanistan  0     
+## 2 Argentina   -0.0131
+## 3 Armenia      0     
+## 4 Australia   -0.0185
+## 5 Austria      0     
+## 6 Azerbaijan   0</code></pre>
+<pre class="r"><code># Ordenar los países por pendiente
+
+
+country_slopes &lt;- country_slopes %&gt;%
+  arrange(desc(Slope))
+
+print(country_slopes)</code></pre>
+<pre><code>## # A tibble: 78 × 2
+##    Country          Slope
+##    &lt;chr&gt;            &lt;dbl&gt;
+##  1 South Korea    0.0408 
+##  2 Japan          0.0362 
+##  3 United Kingdom 0.0215 
+##  4 Poland         0.0208 
+##  5 Ukraine        0.0115 
+##  6 Spain          0.00923
+##  7 France         0.00769
+##  8 Switzerland    0.00769
+##  9 Viet Nam       0.00769
+## 10 North Korea    0.00615
+## # ℹ 68 more rows</code></pre>
 
 
 
