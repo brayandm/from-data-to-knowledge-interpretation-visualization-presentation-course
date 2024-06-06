@@ -450,6 +450,8 @@ world <- world %>%
   left_join(host_counts, by = c("name" = "Host")) %>%
   left_join(average_ranking, by = c("name" = "Country"))
 
+world$Average_Rank[is.na(world$Average_Rank)] <- 100
+
 world$Count[is.na(world$Count)] <- 0
 
 pal_host <- colorNumeric("YlOrRd", domain = world$Count)
@@ -499,9 +501,6 @@ map_host
 ## International Collegiate Programming Contest (ICPC) Heatmap of Ranking Average
 
 ```{r}
-world <- world %>%
-  filter(!is.na(Average_Rank))
-
 map_rank <- leaflet(data = world) %>%
   addTiles() %>%
   addPolygons(
