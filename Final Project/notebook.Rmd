@@ -351,7 +351,7 @@ facet_plot <- ggplot(top_4_countries_data, aes(x = Year, y = Scaled_Rank)) +
   scale_x_continuous(breaks = seq(1999, 2023, by = 4), limits = c(1999, 2023)) +
   facet_wrap(~ Country, scales = "free_y") +
   labs(
-    title = "Ranking Over Years for Top 4 Countries with Lowest Slopes",
+    title = "Average Ranking (%) Over Years for Top 4 Countries with Lowest Slopes",
     x = NULL,
     y = "Scaled Rank"
   ) + theme_HS
@@ -382,7 +382,7 @@ cuba_plot <- ggplot(cuba_data, aes(x = Year, y = Scaled_Rank)) +
   scale_y_continuous(breaks = seq(0, 100, by = 25), limits = c(0, 100)) +
   scale_x_continuous(breaks = seq(1999, 2023, by = 4), limits = c(1999, 2023)) +
   labs(
-    title = "Ranking Over Years for Cuba",
+    title = "Average Ranking (%) Over Years for Cuba",
     x = NULL,
     y = "Scaled Rank"
   ) + theme_HS
